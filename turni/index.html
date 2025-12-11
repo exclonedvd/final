@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Bottega del Caffè - Turni (v16-hf2e-hf2)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#f3e2c0;--bg-card:#f9e9c7;--accent:#c48a3b;
+      --text:#4b2a0b;--text-soft:#7a5430;--border:#d2b58a;
+      --radius-lg:18px;--radius-md:12px;
+      --shadow:0 3px 10px rgba(75,42,11,.2);
+      --font-sans:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      --ok:#1f7a3a; --warn:#b35a00; --bad:#b33939;
+    }
+    html,body{height:100%;}
+    body{
+      font-family:var(--font-sans);
+      background:radial-gradient(circle at top,#f9e9c7 0,#f3e2c0 40%,#e2c89a 100%);
+      color:var(--text);
+      display:flex;justify-content:center;align-items:stretch;
+      padding:10px;
+      overflow-x:hidden;
+    }
+    .app{width:100%;max-width:880px;background:rgba(248,236,210,.96);border-radius:24px;
+      box-shadow:0 10px 40px rgba(75,42,11,.45);display:flex;flex-direction:column;overflow:hidden;}
+    header,footer{padding:10px 14px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,#f9e9c7,#f3e2c0);}
+    footer{border-top:1px solid var(--border);border-bottom:none;font-size:.7rem;display:flex;justify-content:center;gap:6px;}
+    .main{flex:1;overflow-y:auto;padding:10px 12px;}
+    .logo-row{display:flex;align-items:center;justify-content:space-between;}
+    .logo-box{display:flex;align-items:center;gap:8px;}
+    .logo-box img{width:50px;height:50px;border-radius:50%;}
+    .logo-title{font-weight:700;}
+    button{cursor:pointer;border:none;}
+    .btn{padding:9px 14px;border-radius:999px;font-size:.9rem;}
+    .btn-primary{background:linear-gradient(135deg,#c48a3b,#7b4a1a);color:#fff;border:1px solid #7b4a1a;box-shadow:0 4px 10px rgba(75,42,11,.4);}
+    .btn-danger{background:var(--bad);color:#fff;border-radius:999px;border:1px solid var(--bad);}    
+    .btn-outline{background:transparent;border-radius:999px;border:1px solid var(--border);font-size:.8rem;padding:4px 10px;}
+    .btn-ghost{background:rgba(255,255,255,.4);border-radius:999px;border:1px solid rgba(75,42,11,.2);font-size:.8rem;padding:5px 10px;}
+    .btn-warn{background:linear-gradient(135deg,#e7b15f,#c48a3b);color:#4b2a0b;border:1px solid #a96f25;font-size:.8rem;padding:6px 10px;border-radius:999px;}
+    .btn-smart{background:linear-gradient(135deg,#f4c87c,#d99b3f);color:#3b220b;border:1px solid #a96f25;font-size:.8rem;padding:6px 10px;border-radius:999px;}
+    .card{background:var(--bg-card);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:10px;
+      box-shadow:var(--shadow);border:1px solid #e5cc9d;}
+    .title{font-weight:700;margin-bottom:8px;}
+    label{display:block;font-size:.8rem;margin-bottom:3px;color:var(--text-soft);}
+    input,select,textarea{width:100%;padding:8px 9px;border-radius:var(--radius-md);border:1px solid var(--border);background:#fff4dd;font-size:.9rem;}
+    /* campi orari più compatti nelle tabelle modello */
+    .main table input[type="time"],
+    .model-grid table input[type="time"]{
+      width:80px;
+      max-width:100%;
+      padding:4px 6px;
+      font-size:.85rem;
+      border-radius:12px;
+    }
+
+    @media (max-width:600px){
+      .main table input[type="time"],
+      .model-grid table input[type="time"]{
+        width:72px;
+        padding:3px 4px;
+        font-size:.85rem;
+      }
+    }
+
+    textarea{resize:vertical;min-height:60px;}
+    .tabs{display:flex;background:#f0dec1;border-radius:999px;padding:3px;margin-bottom:10px;}
+    .tab-btn{flex:1;border-radius:999px;border:none;background:transparent;padding:7px 0;font-size:.85rem;}
+    .tab-btn.active{background:#fff;border-radius:999px;font-weight:700;box-shadow:var(--shadow);}
+    .hidden{display:none!important;}
+    .list-item{background:#fff4dd;border-radius:var(--radius-md);border:1px solid #e1c89e;padding:7px 9px;margin-bottom:6px;
+      display:flex;justify-content:space-between;align-items:center;font-size:.8rem;}
+    .day-card{background:#fff8e7;border-radius:var(--radius-md);border:1px solid #e3c89e;padding:8px 9px;margin-bottom:6px;}
+    .day-head{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:3px;}
+    .shift-row{display:flex;justify-content:space-between;font-size:.78rem;padding:2px 0;gap:6px;align-items:center;}
+    .shift-empty{color:var(--bad);}
+    .shift-emp-select{max-width:150px;}
+    .hours-summary{margin-top:6px;border-top:1px dashed #d1b98f;padding-top:6px;font-size:.78rem;}
+    .hours-summary div{display:flex;justify-content:space-between;margin-bottom:2px;}
+
+    /* Employee summary card */
+    .emp-summary{
+      background:#fff8e7;border:1px solid #e3c89e;border-radius:var(--radius-md);
+      padding:10px;font-size:.85rem;
+    }
+    .emp-summary-row{
+      display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed #e7d3aa;
+    }
+    .emp-summary-row:last-child{border-bottom:none;}
+    .emp-summary .label{color:var(--text-soft);}
+
+    /* Modelli UI */
+    .model-grid{
+      display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px;font-size:.78rem;
+    }
+    .model-grid table{width:100%;border-collapse:collapse;font-size:.75rem;}
+    .model-grid th,.model-grid td{border:1px solid #d2b58a;padding:3px 4px;text-align:center;}
+    .model-grid th{background:#f3e2c0;}
+    .model-block-title{font-weight:700;font-size:.82rem;margin:4px 0;}
+    @media (min-width:700px){
+      .model-grid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    /* Admin days status - griglia */
+    .status-legend{
+      display:flex;gap:6px;flex-wrap:wrap;font-size:.72rem;margin-bottom:6px;
+    }
+    .pill{
+      padding:3px 8px;border-radius:999px;border:1px solid #d9c39b;background:#fff8e7;
+    }
+    .pill b{font-weight:700;}
+
+    .status-toolbar{
+      display:flex;
+      gap:6px;
+      align-items:center;
+      justify-content:space-between;
+      margin:8px 0 10px 0;
+      flex-wrap:wrap;
+    }
+    .status-toolbar-left{
+      display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+    }
+    .status-toolbar small{font-size:.7rem;color:var(--text-soft);}
+
+    .today-rest-box{
+      background:#fffdf6;
+      border:1px solid #e3c89e;
+      border-radius:12px;
+      padding:8px 10px;
+      font-size:.8rem;
+    }
+    .today-rest-chip{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#fff4dd;
+      border:1px solid #e1c89e;
+      margin:2px 4px 2px 0;
+      font-size:.78rem;
+      font-weight:600;
+    }
+
+    .coverage-box{
+      background:#fffdf6;
+      border:1px solid #e3c89e;
+      border-radius:12px;
+      padding:8px 10px;
+      margin-bottom:8px;
+      font-size:.75rem;
+    }
+    .coverage-row{
+      display:flex;gap:6px;flex-wrap:wrap;
+    }
+    .coverage-pill{
+      padding:4px 8px;border-radius:999px;border:1px solid #e1c89e;background:#fff8e7;
+      display:flex;gap:6px;align-items:center;
+    }
+    .coverage-pill .n{
+      font-weight:700;
+    }
+    .cov-ok{color:var(--ok);}
+    .cov-warn{color:var(--warn);}
+    .cov-bad{color:var(--bad);}
+
+    .status-grid-wrap{
+      overflow:auto;
+      border:1px solid #e3c89e;
+      border-radius:12px;
+      background:#fff8e7;
+    }
+    table.status-grid{
+      width:100%;
+      min-width:700px;
+      border-collapse:collapse;
+      font-size:.75rem;
+    }
+    .status-grid th,.status-grid td{
+      border:1px solid #e3c89e;
+      padding:6px 6px;
+      text-align:center;
+      background:#fffdf6;
+    }
+    .status-grid th{
+      position:sticky; top:0;
+      background:#f3e2c0;
+      z-index:2;
+      font-weight:700;
+    }
+    .status-grid th:first-child,
+    .status-grid td:first-child{
+      position:sticky; left:0;
+      background:#fff4dd;
+      z-index:1;
+      text-align:left;
+      min-width:150px;
+    }
+    .status-cell-select{
+      width:100%;
+      padding:4px 6px;
+      border-radius:999px;
+      font-size:.72rem;
+      background:#fff4dd;
+    }
+    .rest-badge{
+      font-weight:700;
+      font-size:.72rem;
+      padding:2px 6px;
+      border-radius:999px;
+      border:1px solid transparent;
+      display:inline-block;
+      min-width:54px;
+      text-align:center;
+    }
+    .rest-ok{color:var(--ok);border-color:rgba(31,122,58,.35);background:rgba(31,122,58,.08);}
+    .rest-warn{color:var(--warn);border-color:rgba(179,90,0,.35);background:rgba(179,90,0,.08);}
+    .rest-bad{color:var(--bad);border-color:rgba(179,57,57,.35);background:rgba(179,57,57,.08);}
+
+    /* Print header + table */
+    .print-wrapper-title{
+      text-align:center;font-weight:700;margin-bottom:6px;font-size:1rem;
+      text-transform:uppercase;letter-spacing:.06em;
+    }
+    .print-header{
+      border:1px solid #d2b58a;border-radius:12px;padding:6px 8px;margin-bottom:8px;
+      background:#fff8e7;font-size:.78rem;
+    }
+    .print-header-row{display:flex;justify-content:space-between;margin-bottom:3px;}
+    .print-header-row span.label{font-weight:700;}
+
+    /* PRINT TABLE LAYOUT */
+    .print-table-wrapper{
+      margin-top:10px;font-size:.8rem;background:#fff;padding:10px;border-radius:12px;border:1px solid #d0d0d0;
+    }
+    table.print-table{
+      width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:10px;
+    }
+    table.print-table th, table.print-table td{
+      border:1px solid #444;padding:4px 6px;text-align:left;
+    }
+    table.print-table th{background:#f1f1f1;font-weight:600;}
+    .print-summary-title{margin:4px 0;font-weight:600;font-size:.8rem;}
+    .print-sign{
+      margin-top:10px;font-size:.75rem;display:flex;justify-content:space-between;gap:12px;
+    }
+    .print-sign div{
+      border-top:1px solid #444;padding-top:3px;flex:1;text-align:center;
+    }
+
+    .screen-only{}
+
+    
+    /* --- Layout tabelle standard (schermo) --- */
+    .main table:not(.print-table){
+      width:100%;
+      border-collapse:collapse;
+      font-size:.82rem;
+    }
+    .main table:not(.print-table) th,
+    .main table:not(.print-table) td{
+      padding:4px 6px;
+      border-bottom:1px solid #e1c89e;
+    }
+    .main table:not(.print-table) th{
+      text-align:left;
+      font-weight:600;
+      background:#f5e4c2;
+    }
+
+    /* --- Ottimizzazioni per smartphone --- */
+    @media (max-width:600px){
+      html,body{
+        height:100%;
+      }
+      body{
+        padding:4px;
+        align-items:stretch;
+      }
+      .app{
+        max-width:none;
+        border-radius:16px;
+        min-height:100dvh;
+        box-shadow:0 6px 24px rgba(75,42,11,.35);
+      }
+      header,footer{
+        padding:8px 10px;
+      }
+      .logo-row{
+        flex-wrap:wrap;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap:4px;
+      }
+      #statusBox{
+        margin-left:auto;
+        text-align:right;
+      }
+      .logo-box img{
+        width:42px;
+        height:42px;
+      }
+      .main{
+        padding:8px 8px 10px;
+      }
+      /* campi e pulsanti più facili da cliccare */
+      input,select,textarea{
+        font-size:16px; /* evita lo zoom automatico su iOS */
+      }
+      .btn,
+      .btn-primary,
+      .btn-outline,
+      .btn-ghost,
+      .btn-warn,
+      .btn-smart{
+        padding:10px 14px;
+        font-size:.9rem;
+      }
+      /* bottoni principali a tutta larghezza */
+      #loginView .btn-primary,
+      #adminPanel .btn-primary,
+      #adminPanel .btn-warn{
+        width:100%;
+      }
+      .tabs{
+        margin-bottom:8px;
+      }
+      .tab-btn{
+        padding:8px 0;
+        font-size:.9rem;
+      }
+      /* tabelle larghe scorrono in orizzontale */
+      .main table:not(.print-table){
+        display:block;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      .main table:not(.print-table) thead,
+      .main table:not(.print-table) tbody,
+      .main table:not(.print-table) tr,
+      .main table:not(.print-table) th,
+      .main table:not(.print-table) td{
+        white-space:nowrap;
+      }
+      /* riepiloghi ore un po' più grandi */
+      .hours-summary{
+        font-size:.8rem;
+      }
+      /* qualche margine in più tra le card */
+      .card{
+        margin-bottom:8px;
+      }
+    }
+
+@media print{
+      html,body{background:#fff;padding:0;margin:0;font-family:Arial, sans-serif;font-size:10pt;}
+      .app{box-shadow:none;border-radius:0;width:100%;max-width:none;background:#fff;}
+      .screen-only{display:none!important;}
+      #logoutBtn{display:none!important;}
+      .main{padding:10mm;}
+      .card{box-shadow:none;border:none;background:#fff;}
+      #printArea{display:block!important;padding:0!important;}
+      #printBtn,#schedAdmin,#hoursSummary,#weekNotes{display:none!important;}
+      .print-table-wrapper{border:none;padding:0;}
+    }
+  </style>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase configuration fornita
+    const firebaseConfig = {
+      apiKey: "AIzaSyAh6IjL0Vng_jrM5oyk4twdpy3jq65kBBY",
+      authDomain: "turnilavorobar.firebaseapp.com",
+      projectId: "turnilavorobar",
+      storageBucket: "turnilavorobar.firebasestorage.app",
+      messagingSenderId: "257120193332",
+      appId: "1:257120193332:web:c639977bdb353ab171b361",
+      measurementId: "G-04MXP0H6VZ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    if (firebase.analytics) {
+      try { firebase.analytics(); } catch(e) { console.log(e); }
+    }
+    window._firestore = firebase.firestore();
+  </script>
+</head>
+<body>
+<div class="app">
+  <header class="screen-only">
+    <div class="logo-row">
+      <div class="logo-box">
+        <img src="assets/logo.png" alt="logo">
+        <div>
+          <div class="logo-title">Bottega del Caffè</div>
+          <div style="font-size:.7rem;color:var(--text-soft);">Gestione turni</div>
+        </div>
+      </div>
+
+      <div id="statusBox" class="screen-only" style="text-align:right;font-size:.7rem;color:var(--text-soft);">
+        <div>
+          <span id="onlineStatusBullet" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;background:#aaa;"></span>
+          <span id="onlineStatusLabel">Offline</span>
+        </div>
+        <div>Ultima sync: <span id="lastSyncText">-</span></div>
+        <div>Da: <span id="lastSyncUser">-</span></div>
+      </div>
+
+      <button id="logoutBtn" class="btn-ghost hidden">Esci</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <!-- LOGIN -->
+    <div id="loginView" class="card screen-only">
+      <div class="title">Accedi</div>
+      <div class="tabs">
+        <button class="tab-btn active" data-target="tabEmp">Dipendente</button>
+        <button class="tab-btn" data-target="tabAdmin">Admin</button>
+      </div>
+      <div id="tabEmp">
+        <label for="empSelectLogin">Dipendente</label>
+        <select id="empSelectLogin"></select>
+        <label for="empPinLogin" style="margin-top:6px;">PIN</label>
+        <input id="empPinLogin" type="password">
+        <button id="empLoginBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Entra</button>
+      </div>
+      <div id="tabAdmin" class="hidden">
+        <label for="adminPassword">Password admin</label>
+        <input id="adminPassword" type="password" placeholder="admin">
+        <button id="adminLoginBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Entra come admin</button>
+        <div style="font-size:.75rem;margin-top:4px;color:var(--text-soft);">Default: <b>admin</b></div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="adminPanel" class="hidden">
+      <div class="card screen-only">
+        <div class="title">Dipendenti</div>
+        <div style="font-size:.75rem;margin-bottom:6px;">PIN di default: 1234</div>
+
+        <label>Nome</label>
+        <input id="empName">
+
+        <label style="margin-top:6px;">Ore min settimanali</label>
+        <input id="empMin" type="number" value="0">
+
+        <label style="margin-top:6px;">Ore max settimanali</label>
+        <input id="empMax" type="number" value="40">
+
+        <label style="margin-top:6px;">Riposi settimanali previsti</label>
+        <input id="empRestTarget" type="number" value="2" min="0" max="7">
+
+        <label style="margin-top:6px;">Ferie annuali (giorni)</label>
+        <input id="empVacTot" type="number" value="26">
+
+        <label style="margin-top:6px;">PIN</label>
+        <input id="empPin" value="1234">
+
+        <button id="addEmpBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Aggiungi / aggiorna</button>
+        <button id="resetAllBtn" class="btn btn-danger" style="margin-top:8px;width:100%;">Resetta tutto (svuota database)</button>
+        <div style="font-size:.7rem;color:var(--bad);margin-top:4px;">
+          &#9888; Attenzione: elimina TUTTI i dipendenti, i turni, i modelli e lo stato giornaliero.
+        </div>
+      </div>
+
+      <div class="card screen-only">
+        <div class="title">Elenco dipendenti</div>
+        <div id="empList"></div>
+      </div>
+
+      <div class="card screen-only">
+        <div class="title">Modelli turni</div>
+        <label for="modelEditSelect">Seleziona modello</label>
+        <select id="modelEditSelect"></select>
+        <button id="newModelBtn" class="btn btn-outline" style="margin-top:6px;">Nuovo modello</button>
+
+        <label style="margin-top:8px;">Nome modello</label>
+        <input id="modelName">
+
+        <div class="model-grid">
+          <div>
+            <div class="model-block-title">Giorni feriali (Lun-Ven)</div>
+            <table>
+              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <tbody>
+                <tr><td>Persona 1</td><td><input id="wd1Start" type="time"></td><td><input id="wd1End" type="time"></td></tr>
+                <tr><td>Persona 2</td><td><input id="wd2Start" type="time"></td><td><input id="wd2End" type="time"></td></tr>
+                <tr><td>Persona 3</td><td><input id="wd3Start" type="time"></td><td><input id="wd3End" type="time"></td></tr>
+                <tr><td>Persona 4</td><td><input id="wd4Start" type="time"></td><td><input id="wd4End" type="time"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="model-block-title">Sabato</div>
+            <table>
+              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <tbody>
+                <tr><td>Persona 1</td><td><input id="sa1Start" type="time"></td><td><input id="sa1End" type="time"></td></tr>
+                <tr><td>Persona 2</td><td><input id="sa2Start" type="time"></td><td><input id="sa2End" type="time"></td></tr>
+                <tr><td>Persona 3</td><td><input id="sa3Start" type="time"></td><td><input id="sa3End" type="time"></td></tr>
+                <tr><td>Persona 4</td><td><input id="sa4Start" type="time"></td><td><input id="sa4End" type="time"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="model-block-title">Domenica / Festivi</div>
+            <table>
+              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <tbody>
+                <tr><td>Persona 1</td><td><input id="su1Start" type="time"></td><td><input id="su1End" type="time"></td></tr>
+                <tr><td>Persona 2</td><td><input id="su2Start" type="time"></td><td><input id="su2End" type="time"></td></tr>
+                <tr><td>Persona 3</td><td><input id="su3Start" type="time"></td><td><input id="su3End" type="time"></td></tr>
+                <tr><td>Persona 4</td><td><input id="su4Start" type="time"></td><td><input id="su4End" type="time"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div style="font-size:.72rem;color:var(--text-soft);padding:6px 4px;">
+              <b>Nota:</b> il sabato è gestito separatamente.
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <button id="saveModelBtn" class="btn btn-primary" style="flex:1;">Salva modello</button>
+          <button id="deleteModelBtn" class="btn btn-outline" style="flex:1;">Elimina modello</button>
+        </div>
+      </div>
+
+      <div class="card screen-only">
+        <div class="title">Riepilogo riposi (settimana)</div>
+        <div style="font-size:.75rem;margin-bottom:6px;">
+          Riguarda la settimana che inizia il: <span id="weekOffLabel">-</span>
+        </div>
+
+        <div class="status-legend">
+          <span class="pill"><b>Lavora</b></span>
+          <span class="pill"><b>Riposo</b></span>
+          <span class="pill"><b>Ferie</b></span>
+          <span class="pill"><b>Malattia</b></span>
+          <span class="pill">Colonna finale: <b>Riposi / Target</b></span>
+        </div>
+
+        <div class="status-toolbar">
+          <div class="status-toolbar-left">
+            <button id="toggleTodayRestViewBtn" class="btn btn-outline">Mostra solo riposi oggi</button>
+            <button id="autoRestBtn" class="btn-warn" style="display:none;">Assegna riposi automatici</button>
+            <button id="smartAutoRestBtn" class="btn-smart" style="display:none;">Auto riposi + rotazione intelligente</button>
+            <small id="todayKeyLabel">-</small>
+          </div>
+          <small>Vincolo: almeno 4 persone disponibili al giorno.</small>
+        </div>
+
+        <div id="coverageBox" class="coverage-box"></div>
+        <div id="todayRestBox" class="today-rest-box hidden"></div>
+        <div id="weekOffContainer"></div>
+
+        <div id="weekOffAdminAdd" style="margin-top:10px;font-size:.78rem;">
+          <!-- UI per aggiungere/modificare i riposi dei dipendenti verrà generata via JS -->
+        </div>
+      </div>
+
+      <div class="card screen-only">
+        <div class="title">Genera turni</div>
+        <label>Settimana che inizia il (lunedì)</label>
+        <input id="weekStart" type="date">
+        <label style="margin-top:6px;">Modello</label>
+        <select id="modelSelect"></select>
+        <button id="genBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Genera settimana</button>
+        <div id="genHint" style="font-size:.72rem;margin-top:6px;color:var(--text-soft);"></div>
+      </div>
+
+      <!-- AREA STAMPA / PDF -->
+      <div class="card" id="printArea">
+        <div class="print-wrapper-title">Piano turni settimanale</div>
+        <div class="print-header">
+          <div class="print-header-row">
+            <span class="label">Settimana</span>
+            <span id="phWeekRange">-</span>
+          </div>
+          <div class="print-header-row">
+            <span class="label">Modello</span>
+            <span id="phModelName">-</span>
+          </div>
+          <div class="print-header-row">
+            <span class="label">Punto vendita</span>
+            <span>Bottega del Caffè</span>
+          </div>
+        </div>
+
+        <button id="printBtn" class="btn btn-outline screen-only" style="margin-bottom:6px;">Esporta / stampa PDF</button>
+
+        <label for="weekNotes" class="screen-only">Note / comunicazioni interne</label>
+        <textarea id="weekNotes" class="screen-only" placeholder="Es. ferie, permessi, variazioni straordinarie..."></textarea>
+
+        <div id="schedAdmin" class="screen-only" style="margin-top:8px;"></div>
+        <div id="hoursSummary" class="hours-summary screen-only"></div>
+
+        <div class="print-table-wrapper">
+          <table id="printTable" class="print-table"></table>
+          <div class="print-summary-title">Riepilogo per dipendente (settimana)</div>
+          <table id="printSummaryTable" class="print-table"></table>
+          <div class="print-sign">
+            <div>Responsabile turno</div>
+            <div>Firma dipendente</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card screen-only">
+        <div class="title">Situazione dipendenti (storico)</div>
+        <div style="font-size:.75rem;margin-bottom:4px;">Riepilogo su tutti i turni generati.</div>
+        <div id="empStats"></div>
+      </div>
+    </div>
+
+    <!-- EMPLOYEE -->
+    <div id="empPanel" class="hidden">
+      <div class="card">
+        <div class="title">I miei turni</div>
+        <label>Settimana che inizia il (lunedì)</label>
+        <input id="empWeekStart" type="date">
+        <button id="empLoadBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Mostra</button>
+      </div>
+
+      <div class="card">
+        <div class="title">Scheda riepilogativa</div>
+        <div id="empSummaryWeekLabel" style="font-size:.75rem;color:var(--text-soft);margin-bottom:6px;">-</div>
+        <div id="empSummaryBox" class="emp-summary"></div>
+      </div>
+
+      <div class="card">
+        <div class="title">Turni</div>
+        <div id="empWeekTotal" style="font-size:.8rem;color:var(--text-soft);margin-bottom:4px;"></div>
+        <div id="schedEmp"></div>
+      </div>
+
+      <div class="card">
+        <div class="title">Le mie preferenze di riposo</div>
+        <div id="empRestWeekLabel" style="font-size:.75rem;color:var(--text-soft);margin-bottom:6px;">-</div>
+        <div id="empRestPrefs"></div>
+        <button id="empSaveRestBtn" class="btn btn-primary" style="margin-top:8px;width:100%;">Salva preferenze</button>
+      </div>
+
+      <div class="card">
+        <div class="title">Riposi colleghi (questa settimana)</div>
+        <div id="empOthersRestLabel" style="font-size:.75rem;color:var(--text-soft);margin-bottom:6px;">-</div>
+        <div id="empOthersRestBox" style="font-size:.8rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="screen-only">
+    <span>&copy; <span id="yearSpan"></span> Bottega del Caffè</span>
+  </footer>
+</div>
+
+<script>
+  // Storage
+  var STORAGE_EMP = 'bdc_emps_v11';
+  var STORAGE_SCHED = 'bdc_sched_v11';
+  var STORAGE_MODELS = 'bdc_models_v7';
+  var STORAGE_DAY_STATUS = 'bdc_day_status_v4';
+  var adminPassword = 'admin';
+
+  var DAYS = [
+    { key:'mon', label:'Lunedì' },
+    { key:'tue', label:'Martedì' },
+    { key:'wed', label:'Mercoledì' },
+    { key:'thu', label:'Giovedì' },
+    { key:'fri', label:'Venerdì' },
+    { key:'sat', label:'Sabato' },
+    { key:'sun', label:'Domenica' }
+  ];
+
+  function defaultModels(){
+    function mkWeekday(p4Start, p4End){
+      return [
+        { label:'Persona 1', start:'07:00', end:'14:00' },
+        { label:'Persona 2', start:'09:00', end:'14:00' },
+        { label:'Persona 3', start:'14:00', end:'20:30' },
+        { label:'Persona 4', start:p4Start, end:p4End }
+      ];
+    }
+    var m1Week = mkWeekday('14:00','19:00');
+    var m2Week = mkWeekday('15:00','19:00');
+
+    return {
+      "1": {
+        id:"1",
+        name: "Modello 1",
+        weekday: m1Week,
+        saturday: JSON.parse(JSON.stringify(m1Week)),
+        sunday: [
+          { label:'Persona 1', start:'07:30', end:'14:00' },
+          { label:'Persona 2', start:'09:00', end:'14:00' },
+          { label:'Persona 3', start:'14:00', end:'20:00' },
+          { label:'Persona 4', start:'14:00', end:'20:00' }
+        ]
+      },
+      "2": {
+        id:"2",
+        name: "Modello 2",
+        weekday: m2Week,
+        saturday: JSON.parse(JSON.stringify(m2Week)),
+        sunday: [
+          { label:'Persona 1', start:'07:30', end:'14:00' },
+          { label:'Persona 2', start:'09:00', end:'14:00' },
+          { label:'Persona 3', start:'14:00', end:'20:00' },
+          { label:'Persona 4', start:'14:00', end:'20:00' }
+        ]
+      }
+    };
+  }
+
+  var REMOTE_STATE = null;
+  var STATE_DOC_ID = 'singleton';
+  window._currentUserLabel = 'Anonimo';
+  window._isAdminLogged = false;
+
+  function loadRemoteState(){
+    return new Promise(function(resolve){
+      var db = window._firestore;
+      if(!db){
+        console.error('Firestore non disponibile, uso stato locale vuoto.');
+        REMOTE_STATE = {};
+        return resolve();
+      }
+      db.collection('appState').doc(STATE_DOC_ID).get()
+        .then(function(doc){
+          if(doc.exists){
+            REMOTE_STATE = doc.data() || {};
+          }else{
+            REMOTE_STATE = {
+              bdc_emps_v11: [],
+              bdc_sched_v11: {},
+              bdc_day_status_v4: {},
+              bdc_models_v7: null
+            };
+            return db.collection('appState').doc(STATE_DOC_ID).set(REMOTE_STATE);
+          }
+        })
+        .catch(function(err){
+          console.error('Errore caricando Firestore', err);
+          REMOTE_STATE = {};
+        })
+        .finally(function(){
+          // garantisce la presenza dei metadati di sincronizzazione
+          if(!REMOTE_STATE) REMOTE_STATE = {};
+          if(!REMOTE_STATE.lastSyncAt) REMOTE_STATE.lastSyncAt = null;
+          if(!REMOTE_STATE.lastSyncBy) REMOTE_STATE.lastSyncBy = null;
+          if(!REMOTE_STATE.lastSyncById) REMOTE_STATE.lastSyncById = null;
+          resolve();
+        });
+    });
+  }
+
+  function saveRemoteState(){
+    var db = window._firestore;
+    if(!db || !REMOTE_STATE) return;
+
+    // aggiorna metadati di sincronizzazione
+    try{
+      var now = new Date();
+      REMOTE_STATE.lastSyncAt = now.toISOString();
+      var label = window._currentUserLabel || 'Sistema';
+      REMOTE_STATE.lastSyncBy = label;
+      REMOTE_STATE.lastSyncById = window._currentEmp || (window._isAdminLogged ? 'admin' : null);
+    }catch(e){
+      console.error('Errore aggiornando i metadati di sincronizzazione', e);
+    }
+
+    db.collection('appState').doc(STATE_DOC_ID).set(REMOTE_STATE)
+      .then(function(){
+        updateSyncInfoUI();
+      })
+      .catch(function(err){
+        console.error('Errore salvando su Firestore', err);
+      });
+  }
+
+  function lsGet(key, fallback){
+    if(!REMOTE_STATE || typeof REMOTE_STATE[key] === 'undefined' || REMOTE_STATE[key] === null){
+      return fallback;
+    }
+    return REMOTE_STATE[key];
+  }
+  function lsSet(key,val){
+    if(!REMOTE_STATE) REMOTE_STATE = {};
+    REMOTE_STATE[key] = val;
+    saveRemoteState();
+  }
+
+  function updateOnlineStatusUI(){
+    var bullet = document.getElementById('onlineStatusBullet');
+    var label = document.getElementById('onlineStatusLabel');
+    var online = navigator.onLine;
+    if(bullet){
+      bullet.style.background = online ? '#1f7a3a' : '#b33939';
+    }
+    if(label){
+      label.textContent = online ? 'Online' : 'Offline';
+    }
+  }
+
+  function formatDateTimeNice(iso){
+    if(!iso) return '-';
+    try{
+      var d = new Date(iso);
+      if(isNaN(d.getTime())) return '-';
+      var pad = function(n){ return n<10 ? '0'+n : ''+n; };
+      return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() +
+             ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }catch(e){
+      return '-';
+    }
+  }
+
+  function updateSyncInfoUI(){
+    var spanText = document.getElementById('lastSyncText');
+    var spanUser = document.getElementById('lastSyncUser');
+    if(!spanText && !spanUser) return;
+    var lastAt = REMOTE_STATE && REMOTE_STATE.lastSyncAt ? REMOTE_STATE.lastSyncAt : null;
+    var lastBy = REMOTE_STATE && REMOTE_STATE.lastSyncBy ? REMOTE_STATE.lastSyncBy : null;
+    if(spanText){
+      spanText.textContent = formatDateTimeNice(lastAt);
+    }
+    if(spanUser){
+      spanUser.textContent = lastBy || '-';
+    }
+    updateOnlineStatusUI();
+  }
+
+  window.addEventListener('online', updateOnlineStatusUI);
+  window.addEventListener('offline', updateOnlineStatusUI);
+
+  function uid(){ return 'm'+Math.random().toString(36).slice(2,9); }
+  function dMonday(){
+    var d=new Date(); var day=d.getDay(); var diff=(day===0?-6:1)-day; d.setDate(d.getDate()+diff); d.setHours(0,0,0,0); return d;
+  }
+  function fDate(d){ return d.toISOString().split('T')[0]; }
+  function addDays(dateStr,n){ var d=new Date(dateStr); d.setDate(d.getDate()+n); return d; }
+  function durMin(h1,h2){
+    var p1=h1.split(':'),p2=h2.split(':');
+    return (parseInt(p2[0])*60+parseInt(p2[1]))-(parseInt(p1[0])*60+parseInt(p1[1]));
+  }
+  function isMorning(timeStr){ return timeStr && timeStr < '12:00'; }
+
+  function getTodayKey(){
+    var g = new Date().getDay();
+    if(g===0) return 'sun';
+    if(g===1) return 'mon';
+    if(g===2) return 'tue';
+    if(g===3) return 'wed';
+    if(g===4) return 'thu';
+    if(g===5) return 'fri';
+    return 'sat';
+  }
+  function getTodayLabel(){
+    var key = getTodayKey();
+    var d = DAYS.find(function(x){return x.key===key;});
+    return d ? d.label : '';
+  }
+
+  document.getElementById('yearSpan').textContent = new Date().getFullYear();
+  window._showTodayRestOnly = false;
+
+  // Tabs login
+  var tabBtns=document.querySelectorAll('.tab-btn');
+  for(var i=0;i<tabBtns.length;i++){
+    tabBtns[i].onclick=function(){
+      for(var j=0;j<tabBtns.length;j++) tabBtns[j].classList.remove('active');
+      this.classList.add('active');
+      document.getElementById('tabAdmin').classList.add('hidden');
+      document.getElementById('tabEmp').classList.add('hidden');
+      document.getElementById(this.dataset.target).classList.remove('hidden');
+    };
+  }
+
+  // logout
+  document.getElementById('logoutBtn').onclick=function(){
+    document.getElementById('loginView').classList.remove('hidden');
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('empPanel').classList.add('hidden');
+    this.classList.add('hidden');
+    window._currentEmp = null;
+    window._currentUserLabel = 'Anonimo';
+    window._isAdminLogged = false;
+    updateSyncInfoUI();
+  };
+
+  // admin login
+  document.getElementById('adminLoginBtn').onclick=function(){
+    var pwd=document.getElementById('adminPassword').value.trim();
+    if(pwd===adminPassword){
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('logoutBtn').classList.remove('hidden');
+      window._currentEmp = null;
+      window._currentUserLabel = 'Admin';
+      window._isAdminLogged = true;
+      initWeekInputs();
+      renderEmpList();
+      fillEmpSelectLogin();
+      initModelsUI();
+      renderWeekDayStatus();
+      renderAdminSchedule();
+      renderEmpStats();
+      updateGenerateHint();
+      updateTodayLabelUI();
+      updateSyncInfoUI();
+    } else {
+      alert('Password errata (usa "admin").');
+    }
+  };
+
+  // employee login
+  document.getElementById('empLoginBtn').onclick=function(){
+    var id=document.getElementById('empSelectLogin').value;
+    var pin=document.getElementById('empPinLogin').value.trim();
+    var emps=lsGet(STORAGE_EMP,[]);
+    var ok=false;
+    var empName = '';
+    for(var i=0;i<emps.length;i++){
+      if(emps[i].id===id && emps[i].pin===pin){
+        ok=true;
+        empName = emps[i].name || '';
+        break;
+      }
+    }
+    if(!ok){ alert('Nome o PIN errati.'); return; }
+    window._currentEmp=id;
+    window._currentUserLabel = empName || 'Dipendente';
+    window._isAdminLogged = false;
+    document.getElementById('loginView').classList.add('hidden');
+    document.getElementById('empPanel').classList.remove('hidden');
+    document.getElementById('logoutBtn').classList.remove('hidden');
+    initWeekInputs();
+    renderEmpSchedule();
+    renderEmpRestPrefs();
+    renderEmpOthersRest();
+    updateSyncInfoUI();
+  };
+
+  function updateTodayLabelUI(){
+    var lbl = document.getElementById('todayKeyLabel');
+    if(lbl){
+      lbl.textContent = 'Oggi: ' + getTodayLabel();
+    }
+  }
+
+  // Toggle vista riposi oggi
+  document.getElementById('toggleTodayRestViewBtn').onclick=function(){
+    window._showTodayRestOnly = !window._showTodayRestOnly;
+    this.textContent = window._showTodayRestOnly ? 'Torna alla griglia completa' : 'Mostra solo riposi oggi';
+    renderWeekDayStatus();
+  };
+
+  // PRINT
+  document.getElementById('printBtn').onclick=function(){
+    renderAdminSchedule();
+    window.print();
+  };
+
+  // Autosave note
+  document.getElementById('weekNotes').addEventListener('input', function(){
+    var start=document.getElementById('weekStart').value;
+    if(!start) return;
+    var schedAll=lsGet(STORAGE_SCHED,{});
+    if(!schedAll[start]) return;
+    schedAll[start].notes=this.value;
+    lsSet(STORAGE_SCHED,schedAll);
+  });
+
+  // MODELS
+  function getModels(){
+    var models = lsGet(STORAGE_MODELS, null);
+    if(!models){
+      models = defaultModels();
+      lsSet(STORAGE_MODELS, models);
+    } else {
+      var changed=false;
+      Object.keys(models).forEach(function(id){
+        var m=models[id];
+        if(!m.saturday){
+          m.saturday = JSON.parse(JSON.stringify(m.weekday || []));
+          changed=true;
+        }
+      });
+      if(changed) lsSet(STORAGE_MODELS, models);
+    }
+    return models;
+  }
+  function setModels(models){ lsSet(STORAGE_MODELS, models); }
+
+  function populateModelSelects(){
+    var models = getModels();
+    var modelEditSelect = document.getElementById('modelEditSelect');
+    var modelSelect = document.getElementById('modelSelect');
+    modelEditSelect.innerHTML = '';
+    modelSelect.innerHTML = '';
+    var keys = Object.keys(models);
+    if(keys.length === 0){
+      var o = document.createElement('option');
+      o.textContent = 'Nessun modello';
+      o.disabled = true; o.selected = true;
+      modelEditSelect.appendChild(o);
+      modelSelect.appendChild(o.cloneNode(true));
+      return;
+    }
+    keys.forEach(function(id){
+      var m = models[id];
+      var o = document.createElement('option');
+      o.value = id; o.textContent = m.name;
+      modelEditSelect.appendChild(o);
+      var o2 = document.createElement('option');
+      o2.value = id; o2.textContent = m.name;
+      modelSelect.appendChild(o2);
+    });
+  }
+
+  function loadModelIntoForm(id){
+    var models = getModels();
+    var m = models[id];
+    if(!m) return;
+    document.getElementById('modelName').value = m.name;
+
+    function setTime(id,val){ var el=document.getElementById(id); if(el) el.value=val || ''; }
+
+    var wd = m.weekday || [];
+    setTime('wd1Start', wd[0] && wd[0].start); setTime('wd1End', wd[0] && wd[0].end);
+    setTime('wd2Start', wd[1] && wd[1].start); setTime('wd2End', wd[1] && wd[1].end);
+    setTime('wd3Start', wd[2] && wd[2].start); setTime('wd3End', wd[2] && wd[2].end);
+    setTime('wd4Start', wd[3] && wd[3].start); setTime('wd4End', wd[3] && wd[3].end);
+
+    var sa = m.saturday || wd;
+    setTime('sa1Start', sa[0] && sa[0].start); setTime('sa1End', sa[0] && sa[0].end);
+    setTime('sa2Start', sa[1] && sa[1].start); setTime('sa2End', sa[1] && sa[1].end);
+    setTime('sa3Start', sa[2] && sa[2].start); setTime('sa3End', sa[2] && sa[2].end);
+    setTime('sa4Start', sa[3] && sa[3].start); setTime('sa4End', sa[3] && sa[3].end);
+
+    var su = m.sunday || [];
+    setTime('su1Start', su[0] && su[0].start); setTime('su1End', su[0] && su[0].end);
+    setTime('su2Start', su[1] && su[1].start); setTime('su2End', su[1] && su[1].end);
+    setTime('su3Start', su[2] && su[2].start); setTime('su3End', su[2] && su[2].end);
+    setTime('su4Start', su[3] && su[3].start); setTime('su4End', su[3] && su[3].end);
+  }
+
+  function initModelsUI(){
+    populateModelSelects();
+    var models = getModels();
+    var keys = Object.keys(models);
+    if(keys.length>0){
+      document.getElementById('modelEditSelect').value = keys[0];
+      document.getElementById('modelSelect').value = keys[0];
+      loadModelIntoForm(keys[0]);
+    }
+  }
+
+  document.getElementById('modelEditSelect').addEventListener('change', function(){
+    loadModelIntoForm(this.value);
+  });
+
+  document.getElementById('newModelBtn').onclick=function(){
+    var id = uid();
+    var models = getModels();
+    var baseWeek=[
+      {label:'Persona 1',start:'07:00',end:'14:00'},
+      {label:'Persona 2',start:'09:00',end:'14:00'},
+      {label:'Persona 3',start:'14:00',end:'20:30'},
+      {label:'Persona 4',start:'14:00',end:'19:00'}
+    ];
+    models[id] = {
+      id:id, name:'Nuovo modello',
+      weekday: JSON.parse(JSON.stringify(baseWeek)),
+      saturday: JSON.parse(JSON.stringify(baseWeek)),
+      sunday:[
+        {label:'Persona 1',start:'07:30',end:'14:00'},
+        {label:'Persona 2',start:'09:00',end:'14:00'},
+        {label:'Persona 3',start:'14:00',end:'20:00'},
+        {label:'Persona 4',start:'14:00',end:'20:00'}
+      ]
+    };
+    setModels(models);
+    populateModelSelects();
+    document.getElementById('modelEditSelect').value = id;
+    document.getElementById('modelSelect').value = id;
+    loadModelIntoForm(id);
+  };
+
+  document.getElementById('saveModelBtn').onclick=function(){
+    var models = getModels();
+    var id = document.getElementById('modelEditSelect').value;
+    if(!id || !models[id]){ alert('Seleziona un modello o creane uno nuovo.'); return; }
+    var name = document.getElementById('modelName').value.trim() || 'Modello';
+
+    function gt(id){return document.getElementById(id).value || '00:00';}
+
+    models[id].name = name;
+    models[id].weekday = [
+      {label:'Persona 1',start:gt('wd1Start'),end:gt('wd1End')},
+      {label:'Persona 2',start:gt('wd2Start'),end:gt('wd2End')},
+      {label:'Persona 3',start:gt('wd3Start'),end:gt('wd3End')},
+      {label:'Persona 4',start:gt('wd4Start'),end:gt('wd4End')}
+    ];
+    models[id].saturday = [
+      {label:'Persona 1',start:gt('sa1Start'),end:gt('sa1End')},
+      {label:'Persona 2',start:gt('sa2Start'),end:gt('sa2End')},
+      {label:'Persona 3',start:gt('sa3Start'),end:gt('sa3End')},
+      {label:'Persona 4',start:gt('sa4Start'),end:gt('sa4End')}
+    ];
+    models[id].sunday = [
+      {label:'Persona 1',start:gt('su1Start'),end:gt('su1End')},
+      {label:'Persona 2',start:gt('su2Start'),end:gt('su2End')},
+      {label:'Persona 3',start:gt('su3Start'),end:gt('su3End')},
+      {label:'Persona 4',start:gt('su4Start'),end:gt('su4End')}
+    ];
+
+    setModels(models);
+    populateModelSelects();
+    document.getElementById('modelEditSelect').value = id;
+    document.getElementById('modelSelect').value = id;
+    alert('Modello salvato.');
+  };
+
+  document.getElementById('deleteModelBtn').onclick=function(){
+    var models = getModels();
+    var id = document.getElementById('modelEditSelect').value;
+    if(!id || !models[id]) return;
+    if(Object.keys(models).length<=1){ alert('Deve esistere almeno un modello.'); return; }
+    if(!confirm('Eliminare questo modello?')) return;
+    delete models[id];
+    setModels(models);
+    populateModelSelects();
+    var keys = Object.keys(models);
+    document.getElementById('modelEditSelect').value = keys[0];
+    document.getElementById('modelSelect').value = keys[0];
+    loadModelIntoForm(keys[0]);
+  };
+
+  // EMPLOYEES ADD/UPDATE
+  document.getElementById('addEmpBtn').onclick=function(){
+    var name=document.getElementById('empName').value.trim();
+    if(!name){alert('Inserisci il nome');return;}
+    var min=parseFloat(document.getElementById('empMin').value||'0');
+    var max=parseFloat(document.getElementById('empMax').value||'0');
+    var restTarget=parseInt(document.getElementById('empRestTarget').value||'0',10);
+    if(isNaN(restTarget) || restTarget<0) restTarget=0;
+    if(restTarget>7) restTarget=7;
+    var vacTot=parseFloat(document.getElementById('empVacTot').value||'0');
+    var pin=document.getElementById('empPin').value.trim()||'1234';
+
+    var emps=lsGet(STORAGE_EMP,[]);
+    var existing=emps.find(function(e){return e.name===name;});
+    if(existing){
+      existing.min=min; existing.max=max; existing.pin=pin; existing.vacTot=vacTot;
+      existing.restTarget = restTarget;
+    }else{
+      emps.push({
+        id:'e'+Math.random().toString(36).slice(2,9),
+        name:name,min:min,max:max,pin:pin,vacTot:vacTot,restTarget:restTarget
+      });
+    }
+    lsSet(STORAGE_EMP,emps);
+    document.getElementById('empName').value='';
+    renderEmpList();
+    fillEmpSelectLogin();
+    renderWeekDayStatus();
+    renderEmpStats();
+    updateGenerateHint();
+  };
+
+
+  // RESET COMPLETO DATABASE
+  document.getElementById('resetAllBtn').onclick = function () {
+    if (!window._isAdminLogged) {
+      alert('Devi essere loggato come admin per eseguire il reset.');
+      return;
+    }
+
+    var msg1 = 'ATTENZIONE!\n\nQuesta operazione cancellerà definitivamente TUTTI i dati: ' +
+               '\n- Dipendenti\n- Turni\n- Modelli turni\n- Stato giornaliero (riposi, ferie, malattia, ecc.)\n\nProcedere?';
+    if (!confirm(msg1)) return;
+
+    var msg2 = 'Conferma ulteriore:\n\nSei sicuro di voler SVUOTARE COMPLETAMENTE IL DATABASE?';
+    if (!confirm(msg2)) return;
+
+    // Azzeriamo lo stato applicativo salvato su Firestore
+    lsSet(STORAGE_EMP, []);          // dipendenti
+    lsSet(STORAGE_SCHED, {});        // turni
+    lsSet(STORAGE_DAY_STATUS, {});   // stato giornaliero
+    lsSet(STORAGE_MODELS, {});       // modelli turni
+
+    // Reinizializza UI
+    initWeekInputs();
+    renderEmpList();
+    fillEmpSelectLogin();
+    initModelsUI();
+    renderWeekDayStatus();
+    renderAdminSchedule();
+    renderEmpStats();
+    updateGenerateHint();
+    updateTodayLabelUI();
+    updateSyncInfoUI();
+
+    alert('Database svuotato correttamente.');
+  };
+
+  function renderEmpList(){
+    var list=document.getElementById('empList');
+    var emps=lsGet(STORAGE_EMP,[]);
+    if(emps.length===0){list.innerHTML='<div style="font-size:.8rem;">Nessun dipendente.</div>';return;}
+    list.innerHTML='';
+    emps.forEach(function(e){
+      var vac = (e.vacTot!=null)?e.vacTot:'-';
+      var rt = (e.restTarget!=null)?e.restTarget:2;
+      var div=document.createElement('div');
+      div.className='list-item';
+      div.innerHTML='<div>'+e.name+
+        '<br><span style="color:var(--text-soft);font-size:.75rem;">'+
+        e.min+'-'+e.max+' h/sett • Riposi target: '+rt+' • Ferie annue: '+vac+' • PIN '+e.pin+
+        '</span></div><button class="btn-outline" data-name="'+e.name+'">X</button>';
+      list.appendChild(div);
+    });
+    Array.prototype.forEach.call(list.querySelectorAll('button'),function(btn){
+      btn.onclick=function(){
+        if(!confirm('Eliminare questo dipendente?'))return;
+        var name=this.getAttribute('data-name');
+        var emps=lsGet(STORAGE_EMP,[]).filter(function(e){return e.name!==name;});
+        lsSet(STORAGE_EMP,emps);
+        renderEmpList();
+        fillEmpSelectLogin();
+        renderWeekDayStatus();
+        renderEmpStats();
+        updateGenerateHint();
+      };
+    });
+  }
+
+  function fillEmpSelectLogin(){
+    var sel=document.getElementById('empSelectLogin');
+    var emps=lsGet(STORAGE_EMP,[]);
+    sel.innerHTML='';
+    if(emps.length===0){
+      var o=document.createElement('option');o.textContent='Nessun dipendente';o.disabled=true;o.selected=true;sel.appendChild(o);
+      return;
+    }
+    emps.forEach(function(e){
+      var o=document.createElement('option');o.value=e.id;o.textContent=e.name;sel.appendChild(o);
+    });
+  }
+
+  // Week defaults
+  function initWeekInputs(){
+    var m=fDate(dMonday());
+    var a=document.getElementById('weekStart'); if(a)a.value=m;
+    var b=document.getElementById('empWeekStart'); if(b)b.value=m;
+    var label=document.getElementById('weekOffLabel'); if(label) label.textContent = a ? a.value : '-';
+  }
+
+  function getWeekStatus(start){
+    var all = lsGet(STORAGE_DAY_STATUS,{});
+    return all[start] || {};
+  }
+  function setWeekStatus(start, weekStatus){
+    var all = lsGet(STORAGE_DAY_STATUS,{});
+    all[start] = weekStatus;
+    lsSet(STORAGE_DAY_STATUS, all);
+  }
+
+  function countRiposiForEmp(weekStatus, empId){
+    var st = weekStatus[empId] || {};
+    var c=0;
+    for(var k in st){
+      if(st[k]==='riposo') c++;
+    }
+    return c;
+  }
+
+  function getDayRiposiCount(weekStatus, dayKey){
+    var c=0;
+    Object.keys(weekStatus).forEach(function(empId){
+      var st = weekStatus[empId] || {};
+      if(st[dayKey]==='riposo') c++;
+    });
+    return c;
+  }
+
+  function getDayUnavailableCount(weekStatus, dayKey){
+    var c=0;
+    Object.keys(weekStatus).forEach(function(empId){
+      var st = weekStatus[empId] || {};
+      if(st[dayKey]==='riposo' || st[dayKey]==='ferie' || st[dayKey]==='malattia') c++;
+    });
+    return c;
+  }
+
+  function updateGenerateHint(){
+    var hint=document.getElementById('genHint');
+    var start = document.getElementById('weekStart') ? document.getElementById('weekStart').value : '';
+    if(!hint) return;
+    if(!start){ hint.textContent = 'Seleziona una settimana e imposta i riposi/assenze.'; return; }
+    var emps=lsGet(STORAGE_EMP,[]);
+    if(emps.length===0){ hint.textContent='Nessun dipendente inserito.'; return; }
+    var weekStatus = getWeekStatus(start);
+    var mism=[];
+    emps.forEach(function(e){
+      var target = (e.restTarget!=null)?e.restTarget:2;
+      var have = countRiposiForEmp(weekStatus, e.id);
+      if(target !== have){ mism.push(e.name+' '+have+'/'+target); }
+    });
+    hint.textContent = mism.length===0
+      ? 'Riposi settimanali conformi ai target.'
+      : 'Attenzione riposi non conformi: ' + mism.join(' • ');
+  }
+
+  function renderTodayRestBox(weekStart, emps, weekStatus){
+    var box = document.getElementById('todayRestBox');
+    if(!box) return;
+
+    var today = new Date();
+    today.setHours(0,0,0,0);
+
+    var ws = new Date(weekStart);
+    ws.setHours(0,0,0,0);
+    var we = new Date(ws);
+    we.setDate(we.getDate()+6);
+
+    var todayKey = getTodayKey();
+    var todayLabel = getTodayLabel();
+
+    if(today < ws || today > we){
+      box.innerHTML = '<div style="font-weight:700;margin-bottom:4px;">Riposi oggi</div>' +
+        '<div style="color:var(--text-soft);">Oggi ('+fDate(today)+') non rientra nella settimana selezionata.</div>';
+      return;
+    }
+
+    var resting = [];
+    emps.forEach(function(e){
+      var st = (weekStatus[e.id] && weekStatus[e.id][todayKey]) || '';
+      if(st==='riposo') resting.push(e.name);
+    });
+
+    var html = '<div style="font-weight:700;margin-bottom:4px;">Riposi oggi - ' + todayLabel + ' ('+fDate(today)+')</div>';
+    if(resting.length===0){
+      html += '<div style="color:var(--text-soft);">Nessun dipendente in riposo oggi.</div>';
+    }else{
+      html += '<div>';
+      resting.forEach(function(n){
+        html += '<span class="today-rest-chip">'+n+'</span>';
+      });
+      html += '</div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function renderCoverageBox(weekStart, emps, weekStatus){
+    var box = document.getElementById('coverageBox');
+    if(!box) return;
+    if(!weekStart || emps.length===0){
+      box.innerHTML = '';
+      return;
+    }
+    var N = emps.length;
+    var minWorking = 4;
+
+    var html = '<div style="font-weight:700;margin-bottom:4px;">Copertura giornaliera (stima)</div>';
+    html += '<div class="coverage-row">';
+    DAYS.forEach(function(d){
+      var unavail = getDayUnavailableCount(weekStatus, d.key);
+      var available = N - unavail;
+      var cls = available >= minWorking ? 'cov-ok' : (available === minWorking-1 ? 'cov-warn' : 'cov-bad');
+      html += '<span class="coverage-pill '+cls+'"><span>'+d.label.substring(0,3)+'</span><span class="n">'+available+'/'+minWorking+'</span></span>';
+    });
+    html += '</div>';
+    html += '<div style="margin-top:4px;color:var(--text-soft);">Calcolato su Riposo/Ferie/Malattia inseriti. Se un valore è sotto 4, rischi scopertura.</div>';
+    box.innerHTML = html;
+  }
+
+  // Storico riposi per rotazione intelligente
+  function computeRestHistoryCounts(){
+    var all = lsGet(STORAGE_DAY_STATUS, {});
+    var counts = {}; // empId -> dayKey -> count
+    Object.keys(all).forEach(function(weekStart){
+      var ws = all[weekStart] || {};
+      Object.keys(ws).forEach(function(empId){
+        var perEmp = ws[empId] || {};
+        Object.keys(perEmp).forEach(function(dayKey){
+          if(perEmp[dayKey] === 'riposo'){
+            if(!counts[empId]) counts[empId] = {};
+            counts[empId][dayKey] = (counts[empId][dayKey] || 0) + 1;
+          }
+        });
+      });
+    });
+    return counts;
+  }
+
+  function autoAssignRest(weekStart, smartMode){
+    var emps = lsGet(STORAGE_EMP,[]);
+    if(emps.length===0){ alert('Nessun dipendente.'); return; }
+
+    var weekStatus = getWeekStatus(weekStart);
+    emps.forEach(function(e){
+      if(!weekStatus[e.id]) weekStatus[e.id] = {};
+    });
+
+    var N = emps.length;
+    var minWorking = 4;
+    var maxRiposiPerDay = Math.max(0, N - minWorking);
+
+    if(maxRiposiPerDay === 0){
+      alert('Con '+N+' dipendenti e 4 persone richieste al giorno, non è possibile assegnare riposi automatici senza aggiungere personale.');
+      return;
+    }
+
+    var history = smartMode ? computeRestHistoryCounts() : {};
+
+    var needList = emps.map(function(e){
+      var target = (e.restTarget!=null)?e.restTarget:2;
+      var have = countRiposiForEmp(weekStatus, e.id);
+      var need = Math.max(0, target - have);
+      return { emp:e, target:target, have:have, need:need };
+    }).filter(function(x){ return x.need > 0; });
+
+    if(needList.length===0){
+      alert('Tutti i dipendenti hanno già i riposi impostati secondo i target.');
+      renderWeekDayStatus();
+      updateGenerateHint();
+      return;
+    }
+
+    needList.sort(function(a,b){ return b.need - a.need; });
+
+    var dayCounts = {};
+    DAYS.forEach(function(d){ dayCounts[d.key] = getDayRiposiCount(weekStatus, d.key); });
+
+    function canAssign(empId, dayKey){
+      var st = weekStatus[empId][dayKey];
+      if(st && st !== 'riposo') return false; // non sovrascrive ferie/malattia
+      if(st === 'riposo') return false;
+      if(dayCounts[dayKey] >= maxRiposiPerDay) return false;
+      return true;
+    }
+
+    needList.forEach(function(item){
+      var empId = item.emp.id;
+      var remaining = item.need;
+
+      while(remaining > 0){
+        // Candidati ordinati per: meno riposi quel giorno + (in smart) meno storico personale su quel giorno
+        var candidates = DAYS.map(function(d){
+          var base = dayCounts[d.key];
+          var h = smartMode ? ((history[empId] && history[empId][d.key]) || 0) : 0;
+          return { key:d.key, base:base, hist:h };
+        }).sort(function(a,b){
+          if(a.base !== b.base) return a.base - b.base;
+          return a.hist - b.hist;
+        });
+
+        var assigned = false;
+        for(var i=0;i<candidates.length;i++){
+          var dk = candidates[i].key;
+          if(canAssign(empId, dk)){
+            weekStatus[empId][dk] = 'riposo';
+            dayCounts[dk] += 1;
+            remaining -= 1;
+            assigned = true;
+            break;
+          }
+        }
+        if(!assigned) break;
+      }
+    });
+
+    setWeekStatus(weekStart, weekStatus);
+    renderWeekDayStatus();
+    renderAdminSchedule();
+    renderEmpStats();
+    updateGenerateHint();
+
+    var stillMissing = [];
+    emps.forEach(function(e){
+      var target = (e.restTarget!=null)?e.restTarget:2;
+      var have = countRiposiForEmp(weekStatus, e.id);
+      if(have < target){
+        stillMissing.push(e.name + ' ' + have + '/' + target);
+      }
+    });
+    if(stillMissing.length>0){
+      alert('Riposi assegnati, ma alcuni dipendenti restano sotto target per vincolo 4 presenti/giorno:\n' + stillMissing.join('\n'));
+    } else {
+      if(smartMode){
+        alert('Riposi assegnati con rotazione intelligente.');
+      }
+    }
+  }
+
+  // Buttons auto rest
+  document.getElementById('autoRestBtn').onclick=function(){
+    var weekStart = document.getElementById('weekStart').value;
+    if(!weekStart){ alert('Seleziona prima una settimana.'); return; }
+    autoAssignRest(weekStart, false);
+  };
+  document.getElementById('smartAutoRestBtn').onclick=function(){
+    var weekStart = document.getElementById('weekStart').value;
+    if(!weekStart){ alert('Seleziona prima una settimana.'); return; }
+    autoAssignRest(weekStart, true);
+  };
+
+  // Week day status UI (grid + filtro riposi oggi + copertura)
+  function renderWeekDayStatus(){
+    var container=document.getElementById('weekOffContainer');
+    var label=document.getElementById('weekOffLabel');
+    var weekStart=document.getElementById('weekStart').value;
+    var todayBox=document.getElementById('todayRestBox');
+
+    if(!container) return;
+    var emps=lsGet(STORAGE_EMP,[]);
+    if(!weekStart){
+      container.innerHTML='<div style="font-size:.8rem;">Seleziona prima una settimana.</div>';
+      if(label) label.textContent='-';
+      if(todayBox){ todayBox.classList.add('hidden'); }
+      renderCoverageBox('', [], {});
+      return;
+    }
+    if(label) label.textContent=weekStart;
+    if(emps.length===0){
+      container.innerHTML='<div style="font-size:.8rem;">Nessun dipendente.</div>';
+      if(todayBox){ todayBox.classList.add('hidden'); }
+      renderCoverageBox(weekStart, [], {});
+      return;
+    }
+
+    var weekStatus = getWeekStatus(weekStart);
+
+    renderCoverageBox(weekStart, emps, weekStatus);
+
+    if(todayBox){
+      renderTodayRestBox(weekStart, emps, weekStatus);
+      todayBox.classList.toggle('hidden', !window._showTodayRestOnly);
+    }
+
+    if(window._showTodayRestOnly){
+      container.innerHTML = '';
+      updateGenerateHint();
+      return;
+    }
+
+    var wrap=document.createElement('div');
+    wrap.className='status-grid-wrap';
+
+    var table=document.createElement('table');
+    table.className='status-grid';
+
+    var thead=document.createElement('thead');
+    var hr=document.createElement('tr');
+    var thName=document.createElement('th');
+    thName.textContent='Dipendente';
+    hr.appendChild(thName);
+    var thDays=document.createElement('th');
+    thDays.textContent='Giorni di riposo scelti';
+    hr.appendChild(thDays);
+    var thTarget=document.createElement('th');
+    thTarget.textContent='Target';
+    hr.appendChild(thTarget);
+    var thEsito=document.createElement('th');
+    thEsito.textContent='Esito';
+    hr.appendChild(thEsito);
+    thead.appendChild(hr);
+    table.appendChild(thead);
+
+    var tbody=document.createElement('tbody');
+
+    emps.forEach(function(e){
+      var tr=document.createElement('tr');
+
+      var tdName=document.createElement('td');
+      tdName.textContent = e.name;
+      tr.appendChild(tdName);
+
+      var rt = (e.restTarget!=null)?e.restTarget:2;
+      var st = weekStatus[e.id] || {};
+      var days = [];
+      DAYS.forEach(function(d){
+        if(st[d.key]==='riposo'){
+          days.push(d.label.substring(0,3));
+        }
+      });
+
+      var tdDays=document.createElement('td');
+      tdDays.textContent = days.length>0 ? days.join(', ') : '-';
+      tr.appendChild(tdDays);
+
+      var tdTarget=document.createElement('td');
+      tdTarget.textContent = rt;
+      tr.appendChild(tdTarget);
+
+      var tdEsito=document.createElement('td');
+      var have = countRiposiForEmp(weekStatus, e.id);
+      var badge=document.createElement('span');
+      badge.className='rest-badge ' + (have===rt ? 'rest-ok' : (have<rt ? 'rest-warn' : 'rest-bad'));
+      badge.textContent = have + '/' + rt;
+      tdEsito.appendChild(badge);
+      tr.appendChild(tdEsito);
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+
+    container.innerHTML='';
+    container.appendChild(wrap);
+
+    // UI per aggiungere/modificare i riposi da parte dell'admin
+    var adminBox = document.getElementById('weekOffAdminAdd');
+    if(adminBox){
+      if(!weekStart || emps.length===0){
+        adminBox.innerHTML = '';
+      }else{
+        var htmlAdmin = '';
+        htmlAdmin += '<div style="margin-top:8px;font-weight:600;">Aggiungi / modifica riposi per dipendente</div>';
+        htmlAdmin += '<div style="margin-top:4px;">';
+        htmlAdmin += '<label style="display:block;margin-bottom:4px;">Dipendente</label>';
+        htmlAdmin += '<select id="adminRestEmpSelect" style="width:100%;margin-bottom:6px;">';
+        emps.forEach(function(e){
+          htmlAdmin += '<option value="'+e.id+'">'+e.name+'</option>';
+        });
+        htmlAdmin += '</select>';
+        htmlAdmin += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">';
+        DAYS.forEach(function(d){
+          htmlAdmin += '<label style="font-size:.75rem;">';
+          htmlAdmin += '<input type="checkbox" class="admin-rest-day" data-day="'+d.key+'" style="margin-right:3px;">';
+          htmlAdmin += d.label.substring(0,3);
+          htmlAdmin += '</label>';
+        });
+        htmlAdmin += '</div>';
+        htmlAdmin += '<button id="adminRestSaveBtn" class="btn btn-outline" style="width:100%;">Salva riposi per dipendente</button>';
+        htmlAdmin += '<div style="font-size:.7rem;color:var(--text-soft);margin-top:4px;">I riposi impostati qui si sommano o sostituiscono quelli inseriti dal dipendente.</div>';
+        htmlAdmin += '</div>';
+        adminBox.innerHTML = htmlAdmin;
+
+        var btn = document.getElementById('adminRestSaveBtn');
+        if(btn){
+          btn.onclick = function(){
+            var empSel = document.getElementById('adminRestEmpSelect');
+            if(!empSel){ return; }
+            var empId = empSel.value;
+            if(!empId){ alert('Seleziona un dipendente.'); return; }
+
+            var weekStatusNow = getWeekStatus(weekStart);
+            if(!weekStatusNow[empId]) weekStatusNow[empId] = {};
+            var perEmp = weekStatusNow[empId];
+
+            var checks = adminBox.querySelectorAll('.admin-rest-day');
+            checks.forEach(function(chk){
+              var dayKey = chk.getAttribute('data-day');
+              if(chk.checked){
+                if(perEmp[dayKey] !== 'ferie' && perEmp[dayKey] !== 'malattia'){
+                  perEmp[dayKey] = 'riposo';
+                }
+              }else{
+                if(perEmp[dayKey] === 'riposo'){
+                  delete perEmp[dayKey];
+                }
+              }
+            });
+
+            weekStatusNow[empId] = perEmp;
+            setWeekStatus(weekStart, weekStatusNow);
+            renderWeekDayStatus();
+            renderEmpStats();
+            updateGenerateHint();
+            alert('Riposi aggiornati per il dipendente selezionato.');
+          };
+        }
+      }
+    }
+
+    updateGenerateHint();
+  }
+
+  document.getElementById('weekStart').addEventListener('change', function(){
+    var label=document.getElementById('weekOffLabel');
+    if(label) label.textContent=this.value || '-';
+    renderWeekDayStatus();
+    renderAdminSchedule();
+    renderEmpStats();
+    updateGenerateHint();
+  });
+
+  // GENERA TURNI con controllo riposi target
+  
+// GENERA TURNI con controllo riposi target + rispetto ore min/max (heuristic)
+
+// GENERA TURNI con controllo riposi target + rispetto ore min/max + assegnazione intelligente anti-buchi
+
+document.getElementById('genBtn').onclick=function(){
+  var start=document.getElementById('weekStart').value;
+  if(!start){alert('Seleziona la data di inizio settimana');return;}
+  var modelId=document.getElementById('modelSelect').value;
+  var models=getModels();
+  var model=models[modelId];
+  if(!model){alert('Modello non valido');return;}
+  var emps=lsGet(STORAGE_EMP,[]);
+  if(emps.length===0){alert('Nessun dipendente');return;}
+
+  // Usa il modello solo per creare i turni vuoti (senza assegnazione automatica dei dipendenti)
+  var schedAll = lsGet(STORAGE_SCHED,{});
+  var week={days:{},modelId:modelId,notes:document.getElementById('weekNotes').value||''};
+
+  function getDefForDay(key){
+    if(key==='sat') return model.saturday || [];
+    if(key==='sun') return model.sunday || [];
+    return model.weekday || [];
+  }
+
+  DAYS.forEach(function(d,idx){
+    var def = getDefForDay(d.key);
+    var dateStr=fDate(addDays(start,idx));
+    var dayObj={date:dateStr,shifts:[]};
+
+    def.forEach(function(s){
+      if(!s.start || !s.end) return;
+      dayObj.shifts.push({
+        label: s.label || '',
+        start: s.start,
+        end: s.end,
+        empId: null
+      });
+    });
+
+    week.days[d.key]=dayObj;
+  });
+
+  schedAll[start]=week;
+  lsSet(STORAGE_SCHED,schedAll);
+  renderWeekDayStatus();
+  renderAdminSchedule();
+  renderEmpStats();
+  updateGenerateHint();
+};
+
+
+function balanceWeekHours(week, emps, weekStatus){
+  if(!week || !week.days) return {};
+
+  var totals = {};
+  var minMinutes = {};
+  var maxMinutes = {};
+
+  emps.forEach(function(e){
+    totals[e.id]=0;
+    var mn = (e.min!=null && e.min!=='' && !isNaN(e.min)) ? parseFloat(e.min) : 0;
+    var mx = (e.max!=null && e.max!=='' && !isNaN(e.max)) ? parseFloat(e.max) : 9999;
+    minMinutes[e.id]=mn*60;
+    maxMinutes[e.id]=mx*60;
+  });
+
+  function isUnavailable(empId, dayKey){
+    var st = (weekStatus[empId] && weekStatus[empId][dayKey]) || '';
+    return !!st;
+  }
+  function hasShiftThatDay(empId, dayKey){
+    var day = week.days[dayKey]; if(!day) return false;
+    for(var i=0;i<day.shifts.length;i++){
+      if(day.shifts[i].empId===empId) return true;
+    }
+    return false;
+  }
+
+  // calcola totali iniziali
+  DAYS.forEach(function(d){
+    var day = week.days[d.key];
+    if(!day) return;
+    day.shifts.forEach(function(s){
+      if(s.empId){
+        totals[s.empId] += durMin(s.start,s.end);
+      }
+    });
+  });
+
+  function tryReassignShift(dayKey, shiftIdx){
+    var day = week.days[dayKey];
+    if(!day) return false;
+    var shift = day.shifts[shiftIdx];
+    if(!shift || !shift.empId) return false;
+
+    var fromId = shift.empId;
+    var shiftMin = durMin(shift.start, shift.end);
+
+    var candidates = emps.filter(function(emp){
+      if(emp.id===fromId) return false;
+      if(isUnavailable(emp.id, dayKey)) return false;
+      if(hasShiftThatDay(emp.id, dayKey)) return false;
+      return (totals[emp.id] + shiftMin) <= maxMinutes[emp.id];
+    });
+
+    candidates.sort(function(a,b){
+      var aNeed = Math.max(0, minMinutes[a.id] - totals[a.id]);
+      var bNeed = Math.max(0, minMinutes[b.id] - totals[b.id]);
+      if(aNeed !== bNeed) return bNeed - aNeed;
+      return totals[a.id] - totals[b.id];
+    });
+
+    if(candidates.length===0) return false;
+
+    var to = candidates[0];
+    shift.empId = to.id;
+    totals[fromId] -= shiftMin;
+    totals[to.id] += shiftMin;
+    return true;
+  }
+
+  // Pass 1: riduci over-max
+  var changed = true;
+  var guard = 0;
+  while(changed && guard < 200){
+    changed = false; guard++;
+    for(var ei=0; ei<emps.length; ei++){
+      var e = emps[ei];
+      if(totals[e.id] > maxMinutes[e.id]){
+        for(var di=0; di<DAYS.length; di++){
+          var dk = DAYS[di].key;
+          var day = week.days[dk];
+          if(!day) continue;
+          for(var si=0; si<day.shifts.length; si++){
+            if(day.shifts[si].empId === e.id){
+              if(tryReassignShift(dk, si)){
+                changed = true;
+                break;
+              }
+            }
+          }
+          if(changed) break;
+        }
+      }
+    }
+  }
+
+  // Pass 2: aumenta under-min spostando turni da chi ha "slack"
+  changed = true;
+  guard = 0;
+  while(changed && guard < 300){
+    changed = false; guard++;
+
+    var under = emps.map(function(e){
+      return { e:e, deficit: Math.max(0, minMinutes[e.id] - totals[e.id]) };
+    }).filter(function(x){ return x.deficit > 0; })
+      .sort(function(a,b){ return b.deficit - a.deficit; });
+
+    if(under.length===0) break;
+
+    var targetEmp = under[0].e;
+    var took = false;
+
+    for(var di=0; di<DAYS.length && !took; di++){
+      var dk = DAYS[di].key;
+      if(isUnavailable(targetEmp.id, dk)) continue;
+      if(hasShiftThatDay(targetEmp.id, dk)) continue;
+
+      var day = week.days[dk];
+      if(!day) continue;
+
+      for(var si=0; si<day.shifts.length; si++){
+        var sh = day.shifts[si];
+        var fromId = sh.empId;
+        if(!fromId || fromId === targetEmp.id) continue;
+
+        var shMin = durMin(sh.start, sh.end);
+
+        if(totals[targetEmp.id] + shMin > maxMinutes[targetEmp.id]) continue;
+
+        var donorMin = minMinutes[fromId] || 0;
+        if(totals[fromId] - shMin < donorMin) continue;
+
+        // ok swap
+        sh.empId = targetEmp.id;
+        totals[fromId] -= shMin;
+        totals[targetEmp.id] += shMin;
+        changed = true;
+        took = true;
+        break;
+      }
+    }
+  }
+
+  return totals;
+}
+
+
+function computeHours(week){
+    var totals={};
+    DAYS.forEach(function(d){
+      var day=week.days[d.key];
+      if(!day)return;
+      day.shifts.forEach(function(s){
+        if(!s.empId)return;
+        var m=durMin(s.start,s.end);
+        totals[s.empId]=(totals[s.empId]||0)+m;
+      });
+    });
+    return totals;
+  }
+
+  function computeWeekLeaveStats(weekStatus){
+    var res={};
+    Object.keys(weekStatus).forEach(function(empId){
+      var perEmp = weekStatus[empId] || {};
+      Object.keys(perEmp).forEach(function(dayKey){
+        var st = perEmp[dayKey];
+        if(st==='ferie' || st==='malattia'){
+          if(!res[empId]) res[empId]={ferie:0,malattia:0};
+          if(st==='ferie') res[empId].ferie += 1;
+          else if(st==='malattia') res[empId].malattia += 1;
+        }
+      });
+    });
+    return res;
+  }
+
+  function computeShiftCountsForWeek(week){
+    var counts={};
+    DAYS.forEach(function(d){
+      var day=week.days[d.key];
+      if(!day) return;
+      day.shifts.forEach(function(s){
+        if(!s.empId) return;
+        if(!counts[s.empId]) counts[s.empId]={morning:0,afternoon:0};
+        if(isMorning(s.start)) counts[s.empId].morning += 1;
+        else counts[s.empId].afternoon += 1;
+      });
+    });
+    return counts;
+  }
+
+  // ADMIN schedule + print tables
+  function renderAdminSchedule(){
+    var start=document.getElementById('weekStart').value;
+    var box=document.getElementById('schedAdmin');
+    var summaryBox=document.getElementById('hoursSummary');
+    var notesArea=document.getElementById('weekNotes');
+    var phWeekRange=document.getElementById('phWeekRange');
+    var phModelName=document.getElementById('phModelName');
+    var printTable=document.getElementById('printTable');
+    var printSummaryTable=document.getElementById('printSummaryTable');
+
+    var schedAll=lsGet(STORAGE_SCHED,{});
+    var week=schedAll[start];
+    if(!week){
+      if(box) box.innerHTML='<div style="font-size:.8rem;">Nessun turno per questa settimana.</div>';
+      if(summaryBox) summaryBox.innerHTML='';
+      if(notesArea) notesArea.value='';
+      if(phWeekRange) phWeekRange.textContent='-';
+      if(phModelName) phModelName.textContent='-';
+      if(printTable) printTable.innerHTML='<thead><tr><th>Giorno</th><th>Data</th><th>Dipendente</th><th>Turno</th><th>Orario</th></tr></thead><tbody><tr><td colspan="5">Nessun turno generato.</td></tr></tbody>';
+      if(printSummaryTable) printSummaryTable.innerHTML='<thead><tr><th>Dipendente</th><th>Ore settimanali</th><th>Ferie sett.</th><th>Malattia sett.</th></tr></thead><tbody><tr><td colspan="4">Nessun dato.</td></tr></tbody>';
+      return;
+    }
+
+    var emps=lsGet(STORAGE_EMP,[]);
+    var weekStatus = getWeekStatus(start);
+
+    if(box){
+      box.innerHTML='';
+      DAYS.forEach(function(d){
+        var day=week.days[d.key];
+        if(!day)return;
+        var card=document.createElement('div');card.className='day-card';
+        card.innerHTML='<div class="day-head"><span>'+d.label+'</span><span>'+day.date+'</span></div>';
+        day.shifts.forEach(function(s,idx){
+          var row=document.createElement('div');row.className='shift-row';
+          var left=document.createElement('div');
+          var roleLabel = (s.role && s.role.trim ? s.role.trim() : s.role) || s.label || ('Dipendente '+(idx+1));
+          left.textContent = roleLabel+': '+s.start+'-'+s.end;
+          var right=document.createElement('div');
+
+          var sel=document.createElement('select');
+          sel.className='shift-emp-select';
+          sel.setAttribute('data-day', d.key);
+          sel.setAttribute('data-index', idx);
+          var optEmpty=document.createElement('option');
+          optEmpty.value='';optEmpty.textContent='(vuoto)';
+          sel.appendChild(optEmpty);
+
+          var dayKey = d.key;
+          emps.forEach(function(emp){
+            var st = (weekStatus && weekStatus[emp.id] && weekStatus[emp.id][dayKey]) || '';
+            // Se il dipendente è in riposo quel giorno, non proporlo come scelta,
+            // a meno che non sia già assegnato a questo turno (per poterlo correggere).
+            if(st === 'riposo' && emp.id !== s.empId){
+              return;
+            }
+            var o=document.createElement('option');
+            o.value=emp.id;
+            o.textContent=emp.name + (st==='riposo' ? ' (riposo)' : '');
+            if(emp.id===s.empId) o.selected=true;
+            sel.appendChild(o);
+          });
+          right.appendChild(sel);
+          row.appendChild(left);row.appendChild(right);
+          card.appendChild(row);
+        });
+        box.appendChild(card);
+      });
+
+      Array.prototype.forEach.call(box.querySelectorAll('.shift-emp-select'), function(sel){
+        sel.onchange=function(){
+          var dayKey=this.getAttribute('data-day');
+          var idx=parseInt(this.getAttribute('data-index'),10);
+          var val=this.value || null;
+          var schedAll=lsGet(STORAGE_SCHED,{});
+          var week=schedAll[start];
+          if(!week || !week.days[dayKey]) return;
+          week.days[dayKey].shifts[idx].empId = val;
+          schedAll[start]=week;
+          lsSet(STORAGE_SCHED,schedAll);
+          updateSummaryAndHeader(week, emps, weekStatus);
+          buildPrintTables(week, emps, weekStatus);
+          renderEmpStats();
+        };
+      });
+    }
+
+    updateSummaryAndHeader(week, emps, weekStatus);
+    buildPrintTables(week, emps, weekStatus);
+
+    function updateSummaryAndHeader(weekObj, empsArr, weekStatusObj){
+      var totals=computeHours(weekObj);
+      var leaveWeek = computeWeekLeaveStats(weekStatusObj);
+
+      var empIdsMap={};
+      Object.keys(totals).forEach(function(id){empIdsMap[id]=true;});
+      Object.keys(leaveWeek).forEach(function(id){empIdsMap[id]=true;});
+      var allIds = Object.keys(empIdsMap);
+
+      if(summaryBox){
+        if(allIds.length===0){
+          summaryBox.innerHTML='';
+        } else {
+          var html='<div style="font-weight:700;margin-bottom:3px;">Riepilogo settimanale (ore / ferie / malattia)</div>';
+          allIds.forEach(function(empId){
+            var e=empsArr.find(function(x){return x.id===empId;});
+            var name=e?e.name:'?';
+            var h=( (totals[empId]||0) /60).toFixed(1);
+            var lw=leaveWeek[empId] || {ferie:0,malattia:0};
+            html+='<div><span>'+name+'</span><span>'+h+' h • ferie: '+lw.ferie+' • malattia: '+lw.malattia+'</span></div>';
+          });
+          summaryBox.innerHTML=html;
+        }
+      }
+
+      if(notesArea) notesArea.value = weekObj.notes || '';
+      var mondayDate = start;
+      var sundayDate = fDate(addDays(start,6));
+      if(phWeekRange) phWeekRange.textContent = mondayDate + ' → ' + sundayDate;
+      var models=getModels();
+      var mModel = models[weekObj.modelId] || models[Object.keys(models)[0]];
+      if(phModelName) phModelName.textContent = mModel ? mModel.name : '-';
+    }
+
+    function buildPrintTables(weekObj, empsArr, weekStatusObj){
+      if(!printTable || !printSummaryTable) return;
+
+      var html = '<thead><tr>'+
+        '<th>Giorno</th><th>Data</th><th>Dipendente</th><th>Turno</th><th>Orario</th>'+
+        '</tr></thead><tbody>';
+
+      DAYS.forEach(function(d){
+        var day=weekObj.days[d.key];
+        if(!day)return;
+        day.shifts.forEach(function(s){
+          var e=empsArr.find(function(x){return x.id===s.empId;});
+          var name=e?e.name:'-';
+          var roleLabel = (s.role && s.role.trim ? s.role.trim() : s.role) || s.label || '-';
+          html+='<tr>'+
+            '<td>'+d.label+'</td>'+
+            '<td>'+day.date+'</td>'+
+            '<td>'+name+'</td>'+
+            '<td>'+roleLabel+'</td>'+
+            '<td>'+s.start+' - '+s.end+'</td>'+
+          '</tr>';
+        });
+      });
+      html+='</tbody>';
+      printTable.innerHTML = html;
+
+      var totals = computeHours(weekObj);
+      var leaveWeek = computeWeekLeaveStats(weekStatusObj);
+
+      var empIdsMap={};
+      Object.keys(totals).forEach(function(id){empIdsMap[id]=true;});
+      Object.keys(leaveWeek).forEach(function(id){empIdsMap[id]=true;});
+      var allIds = Object.keys(empIdsMap);
+
+      var html2 = '<thead><tr><th>Dipendente</th><th>Ore settimanali</th><th>Ferie sett.</th><th>Malattia sett.</th></tr></thead><tbody>';
+      if(allIds.length===0){
+        html2+='<tr><td colspan="4">Nessun dato per questa settimana.</td></tr>';
+      }else{
+        allIds.forEach(function(empId){
+          var e=empsArr.find(function(x){return x.id===empId;});
+          var name=e?e.name:'?';
+          var h=( (totals[empId]||0) /60).toFixed(1);
+          var lw=leaveWeek[empId] || {ferie:0,malattia:0};
+          html2+='<tr><td>'+name+'</td><td>'+h+' h</td><td>'+lw.ferie+'</td><td>'+lw.malattia+'</td></tr>';
+        });
+      }
+      html2+='</tbody>';
+      printSummaryTable.innerHTML = html2;
+    }
+  }
+
+  // Employee stats (storico)
+  function computeEmployeeStats(){
+    var emps = lsGet(STORAGE_EMP,[]);
+    var schedAll = lsGet(STORAGE_SCHED,{});
+    var dayStatusAll = lsGet(STORAGE_DAY_STATUS,{});
+    var stats = {};
+    emps.forEach(function(e){
+      stats[e.id] = {morning:0,afternoon:0,ferie:0,malattia:0};
+    });
+
+    Object.keys(schedAll).forEach(function(weekStart){
+      var week = schedAll[weekStart];
+      if(!week) return;
+      DAYS.forEach(function(d){
+        var day = week.days[d.key];
+        if(!day) return;
+        day.shifts.forEach(function(s){
+          if(!s.empId) return;
+          if(!stats[s.empId]) return;
+          if(isMorning(s.start)) stats[s.empId].morning += 1;
+          else stats[s.empId].afternoon += 1;
+        });
+      });
+    });
+
+    Object.keys(dayStatusAll).forEach(function(weekStart){
+      var weekStatus = dayStatusAll[weekStart] || {};
+      Object.keys(weekStatus).forEach(function(empId){
+        var perEmp = weekStatus[empId] || {};
+        Object.keys(perEmp).forEach(function(dayKey){
+          var st = perEmp[dayKey];
+          if(!stats[empId]) return;
+          if(st === 'ferie') stats[empId].ferie += 1;
+          else if(st === 'malattia') stats[empId].malattia += 1;
+        });
+      });
+    });
+    return stats;
+  }
+
+  function renderEmpStats(){
+    var container = document.getElementById('empStats');
+    if(!container) return;
+    var emps = lsGet(STORAGE_EMP,[]);
+    if(emps.length===0){
+      container.innerHTML = '<div style="font-size:.8rem;">Nessun dipendente.</div>';
+      return;
+    }
+    var stats = computeEmployeeStats();
+    var html = '<table class="stats-table"><thead><tr>'+
+      '<th>Nome</th><th>Turni mattina</th><th>Turni pomeriggio</th>'+
+      '<th>Ferie usate</th><th>Ferie residue</th><th>Malattia</th>'+
+      '</tr></thead><tbody>';
+    emps.forEach(function(e){
+      var st = stats[e.id] || {morning:0,afternoon:0,ferie:0,malattia:0};
+      var totFerie = e.vacTot!=null ? e.vacTot : 0;
+      var usedF = st.ferie || 0;
+      var resid = totFerie - usedF;
+      if(resid < 0) resid = 0;
+      html+='<tr>'+
+        '<td>'+e.name+'</td>'+
+        '<td>'+st.morning+'</td>'+
+        '<td>'+st.afternoon+'</td>'+
+        '<td>'+usedF+'</td>'+
+        '<td>'+resid+'</td>'+
+        '<td>'+st.malattia+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  // Preferenze di riposo dipendente
+  function renderEmpRestPrefs(){
+    var label = document.getElementById('empRestWeekLabel');
+    var container = document.getElementById('empRestPrefs');
+    var weekInput = document.getElementById('empWeekStart');
+    var meId = window._currentEmp;
+
+    if(!container || !weekInput || !meId){
+      return;
+    }
+    var start = weekInput.value;
+    if(!start){
+      container.innerHTML = '<div style="font-size:.8rem;">Seleziona prima una settimana.</div>';
+      if(label) label.textContent = '-';
+      return;
+    }
+    if(label) label.textContent = start;
+
+    var weekStatus = getWeekStatus(start);
+    var myStatus = weekStatus[meId] || {};
+
+    var html = '';
+    html += '<div class="status-legend" style="margin-bottom:4px;font-size:.75rem;">';
+    html += '<span class="pill"><b>Lavora</b></span>';
+    html += '<span class="pill"><b>Riposo</b></span>';
+    html += '<span class="pill"><b>Ferie</b></span>';
+    html += '<span class="pill"><b>Malattia</b></span>';
+    html += '</div>';
+
+    html += '<table class="status-grid"><thead><tr><th>Giorno</th><th>Stato</th></tr></thead><tbody>';
+    DAYS.forEach(function(d){
+      var val = myStatus[d.key] || '';
+      html += '<tr>';
+      html += '<td>'+d.label+'</td>';
+      html += '<td><select data-day="'+d.key+'" class="status-select">';
+      var options = [
+        {v:'', t:'Lavora'},
+        {v:'riposo', t:'Riposo'},
+        {v:'ferie', t:'Ferie'},
+        {v:'malattia', t:'Malattia'}
+      ];
+      options.forEach(function(o){
+        html += '<option value="'+o.v+'"'+(o.v===val?' selected':'')+'>'+o.t+'</option>';
+      });
+      html += '</select></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+
+    container.innerHTML = html;
+  }
+
+  function renderEmpOthersRest(){
+    var label = document.getElementById('empOthersRestLabel');
+    var box = document.getElementById('empOthersRestBox');
+    var weekInput = document.getElementById('empWeekStart');
+    var meId = window._currentEmp;
+
+    if(!box || !weekInput){
+      return;
+    }
+    var start = weekInput.value;
+    if(!start){
+      box.innerHTML = '<div style="font-size:.8rem;">Seleziona prima una settimana.</div>';
+      if(label) label.textContent = '-';
+      return;
+    }
+    if(label) label.textContent = start;
+
+    var weekStatus = getWeekStatus(start);
+    var emps = lsGet(STORAGE_EMP,[]);
+
+    if(!weekStatus || Object.keys(weekStatus).length===0){
+      box.innerHTML = '<div style="font-size:.8rem;">Nessuna preferenza di riposo registrata.</div>';
+      return;
+    }
+
+    var html = '<div style="font-size:.75rem;color:var(--text-soft);margin-bottom:4px;">Puoi vedere i giorni di riposo scelti dagli altri per evitare sovrapposizioni. Non puoi modificarli.</div>';
+    html += '<table class="status-grid"><thead><tr><th>Dipendente</th><th>Giorni di riposo</th></tr></thead><tbody>';
+
+    emps.forEach(function(e){
+      if(!e || e.id===meId) return;
+      var st = weekStatus[e.id] || {};
+      var days = [];
+      DAYS.forEach(function(d){
+        if(st[d.key]==='riposo'){
+          days.push(d.label.substring(0,3));
+        }
+      });
+      var txt = days.length>0 ? days.join(', ') : '-';
+      html += '<tr><td>'+e.name+'</td><td>'+txt+'</td></tr>';
+    });
+
+    html += '</tbody></table>';
+    box.innerHTML = html;
+  }
+
+  // EMPLOYEE PANEL
+  document.getElementById('empLoadBtn').onclick=function(){
+    renderEmpSchedule();
+    renderEmpRestPrefs();
+    renderEmpOthersRest();
+  };
+
+  var empSaveRestBtn = document.getElementById('empSaveRestBtn');
+  if(empSaveRestBtn){
+    empSaveRestBtn.onclick=function(){
+      var meId = window._currentEmp;
+      var weekInput = document.getElementById('empWeekStart');
+      if(!meId || !weekInput){ return; }
+      var start = weekInput.value;
+      if(!start){ alert('Seleziona prima una settimana.'); return; }
+
+      var emps = lsGet(STORAGE_EMP,[]);
+      var me = null;
+      for(var i=0;i<emps.length;i++){
+        if(emps[i].id===meId){ me = emps[i]; break; }
+      }
+      var target = (me && me.restTarget!=null) ? me.restTarget : null;
+
+      var selects = document.querySelectorAll('#empRestPrefs select[data-day]');
+      var riposiCount = 0;
+      selects.forEach(function(sel){
+        var val = sel.value || '';
+        if(val === 'riposo'){
+          riposiCount++;
+        }
+      });
+
+      if(target!=null && target>=0 && riposiCount > target){
+        alert('Puoi indicare al massimo ' + target + ' giorni di riposo. Attualmente ne hai selezionati ' + riposiCount + '.');
+        return;
+      }
+
+      var weekStatus = getWeekStatus(start);
+      if(!weekStatus[meId]) weekStatus[meId] = {};
+      var perEmp = weekStatus[meId];
+
+      selects.forEach(function(sel){
+        var dayKey = sel.getAttribute('data-day');
+        var val = sel.value || '';
+        if(val){ perEmp[dayKey] = val; }
+        else { delete perEmp[dayKey]; }
+      });
+      setWeekStatus(start, weekStatus);
+      renderEmpOthersRest();
+      alert('Preferenze di riposo aggiornate.');
+    };
+  }
+
+
+  function renderEmpWeekSummary(start, meId){
+    var summaryBox = document.getElementById('empSummaryBox');
+    var weekLabel = document.getElementById('empSummaryWeekLabel');
+    if(!summaryBox) return;
+
+    var schedAll = lsGet(STORAGE_SCHED, {});
+    var week = schedAll[start];
+    var emps = lsGet(STORAGE_EMP, []);
+    var me = emps.find(function(e){return e.id===meId;});
+
+    var dayStatusAll = lsGet(STORAGE_DAY_STATUS, {});
+    var weekStatus = dayStatusAll[start] || {};
+    var myStatus = weekStatus[meId] || {};
+
+    var ferieW = 0, malattiaW = 0, riposoW = 0;
+    Object.keys(myStatus).forEach(function(k){
+      if(myStatus[k]==='ferie') ferieW++;
+      else if(myStatus[k]==='malattia') malattiaW++;
+      else if(myStatus[k]==='riposo') riposoW++;
+    });
+
+    var hoursW = 0;
+    var morningW = 0, afternoonW = 0;
+    if(week){
+      var totals = computeHours(week);
+      hoursW = (totals[meId]||0)/60;
+      var counts = computeShiftCountsForWeek(week)[meId] || {morning:0,afternoon:0};
+      morningW = counts.morning;
+      afternoonW = counts.afternoon;
+    }
+
+    var allStats = computeEmployeeStats();
+    var myHist = allStats[meId] || {morning:0,afternoon:0,ferie:0,malattia:0};
+    var totFerieAnnue = me && me.vacTot!=null ? me.vacTot : 0;
+    var ferieUsateTot = myHist.ferie || 0;
+    var ferieResidue = Math.max(0, totFerieAnnue - ferieUsateTot);
+
+    if(weekLabel){
+      var end = fDate(addDays(start,6));
+      weekLabel.textContent = 'Settimana: ' + start + ' → ' + end;
+    }
+
+    var name = me ? me.name : 'Dipendente';
+    var targetRiposi = me && me.restTarget!=null ? me.restTarget : 2;
+
+    function row(label, value){
+      return '<div class="emp-summary-row"><span class="label">'+label+'</span><span><b>'+value+'</b></span></div>';
+    }
+
+    var html = '';
+    html += row('Nome', name);
+    html += row('Ore settimanali', hoursW.toFixed(1) + ' h');
+    html += row('Turni mattina (sett.)', String(morningW));
+    html += row('Turni pomeriggio (sett.)', String(afternoonW));
+    html += row('Riposi segnati (sett.)', String(riposoW) + ' / ' + targetRiposi);
+    html += row('Ferie/licenze usate (sett.)', String(ferieW));
+    html += row('Malattia usata (sett.)', String(malattiaW));
+    html += '<div style="height:6px;"></div>';
+    html += row('Ferie usate (totale)', String(ferieUsateTot));
+    html += row('Ferie residue (annuali)', String(ferieResidue));
+    html += row('Malattia (totale)', String(myHist.malattia || 0));
+    html += row('Turni mattina (totale)', String(myHist.morning || 0));
+    html += row('Turni pomeriggio (totale)', String(myHist.afternoon || 0));
+
+    summaryBox.innerHTML = html || '<div>Nessun dato disponibile.</div>';
+  }
+
+  function renderEmpSchedule(){
+    var start=document.getElementById('empWeekStart').value;
+    var box=document.getElementById('schedEmp');
+    var totalBox=document.getElementById('empWeekTotal');
+    var schedAll=lsGet(STORAGE_SCHED,{});
+    var week=schedAll[start];
+    var meId=window._currentEmp;
+
+    renderEmpWeekSummary(start, meId);
+
+    if(!week){
+      if(box) box.innerHTML='<div style="font-size:.8rem;">Nessun turno per questa settimana.</div>';
+      if(totalBox) totalBox.textContent='';
+      return;
+    }
+    if(box){
+      box.innerHTML='';
+      var myMinutes=0;
+      DAYS.forEach(function(d){
+        var day=week.days[d.key];
+        if(!day)return;
+        var my=day.shifts.filter(function(s){return s.empId===meId;});
+        var card=document.createElement('div');card.className='day-card';
+        card.innerHTML='<div class="day-head"><span>'+d.label+'</span><span>'+day.date+'</span></div>';
+        if(my.length===0){
+          var row=document.createElement('div');row.className='shift-row';
+          row.innerHTML='<div>-</div><div class="shift-empty">Riposo</div>';card.appendChild(row);
+        }else{
+          my.forEach(function(s){
+            var row=document.createElement('div');row.className='shift-row';
+            row.innerHTML='<div>'+s.start+'-'+s.end+'</div><div>'+s.role+'</div>';card.appendChild(row);
+            myMinutes+=durMin(s.start,s.end);
+          });
+        }
+        box.appendChild(card);
+      });
+      if(totalBox) totalBox.textContent='Totale ore settimana: '+(myMinutes/60).toFixed(1)+' h';
+    }
+  }
+
+  // SEED + compat restTarget + saturday nelle models
+  (async function(){
+    await loadRemoteState();
+    var emps=lsGet(STORAGE_EMP,[]);
+    var changed=false;
+    emps.forEach(function(e){
+      if(e.restTarget==null){ e.restTarget=2; changed=true; }
+    });
+    if(changed) lsSet(STORAGE_EMP, emps);
+
+    if(!lsGet(STORAGE_MODELS,null)){
+      lsSet(STORAGE_MODELS, defaultModels());
+    } else {
+      getModels();
+    }
+
+    renderEmpList();
+    fillEmpSelectLogin();
+    initWeekInputs();
+    updateTodayLabelUI();
+    updateSyncInfoUI();
+  })();
+</script>
+</body>
+</html>

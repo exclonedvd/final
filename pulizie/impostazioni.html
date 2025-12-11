@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>Turni Pulizie - Impostazioni turni</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="logo-64x64.png" rel="icon" sizes="64x64" type="image/png"/>
+<link href="logo-192x192.png" rel="apple-touch-icon" sizes="192x192"/>
+<link href="manifest.json" rel="manifest"/>
+<meta content="#4b2e13" name="theme-color"/>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body data-page="settings">
+<div class="splash-overlay" id="splash">
+<div class="splash-content">
+<img alt="Bottega del Caffè" class="splash-logo" src="logo.png"/>
+<div class="splash-title">Bottega del Caffè</div>
+<div class="splash-subtitle">Caricamento turni in corso...</div>
+<div class="splash-loader"></div>
+</div>
+</div>
+<div class="modal-overlay modal-hidden" id="app-modal">
+<div class="modal-card">
+<div class="modal-title" id="modal-title"></div>
+<div class="modal-message" id="modal-message"></div>
+<div class="modal-actions">
+<button class="secondary" id="modal-cancel-btn" type="button">Annulla</button>
+<button id="modal-ok-btn" type="button">OK</button>
+</div>
+</div>
+</div>
+<div class="app-shell">
+<header class="app-header">
+<img alt="Bottega del Caffè - Turni pulizie" class="app-logo" src="logo.png"/>
+<div class="app-title">Bottega del Caffè</div>
+<div class="app-subtitle">Impostazioni turni</div>
+<nav class="app-nav">
+<button onclick="window.location.href='index.html'" type="button">🏠 Home</button>
+<button onclick="window.location.href='scadenze.html'" type="button">📅 Scadenze</button>
+<button onclick="window.location.href='dafare.html'" type="button">📄 Da Fare</button>
+<button onclick="window.location.href='completati.html'" type="button">✅ Completati</button>
+<button onclick="window.location.href='statistiche.html'" type="button">📈 Statistiche</button>
+<button onclick="window.location.href='impostazioni.html'" type="button">⚙️ Impostazioni</button></nav>
+</header>
+<main class="app-main">
+<section class="card">
+<h2>Dipendenti</h2>
+<div class="form-group">
+<div class="form-label">Elenco dipendenti (uno per riga)</div>
+<textarea id="employees-input" placeholder="Es.
+Mario
+Luisa
+Giulia"></textarea>
+</div>
+<div class="actions">
+<button id="save-employees-btn" type="button">Salva dipendenti</button>
+<button id="assign-btn" type="button">Distribuisci turni</button><button id="assign-due-btn" type="button">Distribuisci solo scadenze</button>
+<button class="secondary danger" id="reset-all-btn" type="button">🧨 Resetta tutti i dati</button>
+</div>
+</section>
+
+<section class="card">
+<h2>Dipendenti fuori turnazione (assegnazioni fisse)</h2>
+<p class="hint">
+Formato: <strong>Nome: Lavoro1, Lavoro2</strong><br>
+Questi dipendenti verranno esclusi dalla distribuzione automatica e riceveranno solo i lavori indicati.
+</p>
+<div class="form-group">
+<div class="form-label">Assegnazioni fisse</div>
+<textarea id="fixed-only-input" placeholder="Es.
+Mario: Bagno, Vetri
+Giulia: Magazzino"></textarea>
+</div>
+<div class="actions">
+<button id="save-fixed-only-btn" type="button">Salva assegnazioni fisse</button>
+</div>
+</section>
+
+<section class="card"><h2>Regole di assegnazione (opzionale)</h2><div class="form-group"><div class="form-label">Esclusioni</div><textarea id="rules-exclude" placeholder="Mario: Bagno (compreso mensola)
+Luisa: Cimitero coppette"></textarea></div><div class="form-group"><div class="form-label">Preferenze</div><textarea id="rules-prefer" placeholder="Mario: Frighi del latte/crodini/succhi/bevande"></textarea></div><div class="actions"><button id="save-rules-btn" type="button">Salva regole</button></div><p class="hint small">Usa i nomi dei lavori. Separa più lavori con virgola.</p></section><section class="card"><h2>Aspetto e scadenze</h2><div class="form-group"><div class="form-label">Tema</div><select id="theme-select"><option value="light">Chiaro</option><option value="dark">Scuro</option><option value="auto">Automatico</option></select></div><div class="form-group"><div class="form-label">Giorno standard mensili (1-28, opzionale)</div><input id="monthly-standard-day" max="28" min="1" placeholder="Es. 5" type="number"/></div><p class="hint small">Se impostato, le attività mensili scadranno ogni mese in quel giorno.</p></section>
+<section class="card">
+<h2>Nuovi lavori personalizzati</h2>
+<div class="form-group">
+<div class="form-label">Nome lavoro</div>
+<input id="custom-task-name" placeholder="Es. Pulizia insegna esterna" type="text"/>
+</div>
+<div class="form-group">
+<div class="form-label">Intervallo</div>
+<select id="custom-task-interval">
+<option value="settimana">1 settimana</option>
+<option value="mese">1 mese</option>
+<option value="due-mesi">2 mesi</option>
+<option value="anno">1 anno</option>
+</select>
+</div>
+<div class="actions">
+<button id="add-custom-task-btn" type="button">Aggiungi lavoro</button>
+</div>
+<div class="form-group" style="margin-top:0.75rem;">
+<div class="form-label">Lavori personalizzati attivi</div>
+<div id="custom-task-list"></div>
+</div>
+</section><section class="card"><h2>Note dei lavori</h2><div class="form-group"><div class="form-label">Scrivi una nota per lavoro (una riga per lavoro)</div><textarea id="notes-input" placeholder="Bagno (compreso mensola): usare prodotto X
+Frighi del latte/crodini/succhi/bevande: controlla guarnizioni"></textarea></div><div class="actions"><button id="save-notes-btn" type="button">Salva note</button></div><p class="hint small">Le note appariranno nelle schede dei lavori e nelle scadenze.</p></section>
+</main>
+<footer class="app-footer">
+Web-app turni pulizie La Bottega del caffé
+    </footer>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js').catch(function(err) {
+          console.log('Service worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

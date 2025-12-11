@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Bottega del Caffè - App</title>
+  <style>
+    :root {
+      --bg: #f3e0c7;
+      --bg-dark: #e0c6a0;
+      --coffee: #4b2a22;
+      --coffee-soft: #6a3a2b;
+      --accent: #d1a56a;
+      --radius-card: 18px;
+      --shadow-soft: 0 4px 10px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--coffee);}
+    .app-shell{min-height:100vh;max-width:480px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:16px;}
+    header{text-align:center;}
+    .logo-wrap{
+      width:160px;height:160px;
+      border-radius:50%;
+      margin:0 auto 10px;
+      overflow:hidden;
+      border:4px solid var(--coffee);
+      box-shadow:var(--shadow-soft);
+    }
+    .logo-wrap img{width:100%;height:100%;object-fit:cover;}
+    .title{font-family:Georgia,serif;font-size:1.35rem;text-transform:uppercase;letter-spacing:.04em;}
+    .subtitle{margin-top:4px;font-size:.9rem;opacity:.85;}
+    .section-label{font-size:.8rem;text-transform:uppercase;margin-bottom:8px;color:var(--coffee-soft);letter-spacing:.12em;}
+    .apps-list{display:flex;flex-direction:column;gap:10px;}
+    .app-card{
+      display:flex;align-items:center;gap:12px;
+      padding:12px 14px;border-radius:var(--radius-card);
+      background:linear-gradient(135deg,#f6e5c9,var(--bg-dark));
+      border:1px solid rgba(75,42,34,.12);
+      box-shadow:var(--shadow-soft);
+      text-decoration:none;color:inherit;
+      transition:transform .1s ease, box-shadow .1s ease;
+    }
+    .app-card:active{transform:scale(.98) translateY(1px);box-shadow:0 2px 6px rgba(0,0,0,.18);}
+
+    .app-icon{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      background:#e8d7b7;
+      border:1px dashed rgba(75,42,34,.4);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.7rem;
+      color:var(--coffee);
+      flex-shrink:0;
+      overflow:hidden;
+      padding:2px;
+    }
+
+    .app-icon img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      border-radius:10px;
+      display:block;
+    }
+
+    .app-main{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      flex:1;
+      min-width:0;
+    }
+    .app-header-row{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+    .app-name{
+      font-weight:600;
+      font-size:.96rem;
+    }
+    .app-status{
+      font-size:.7rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid rgba(75,42,34,.35);
+      background:rgba(243,224,199,.9);
+      white-space:nowrap;
+    }
+    .app-status.operativa{
+      background:rgba(120,180,120,.18);
+      border-color:rgba(60,120,60,.6);
+    }
+    .app-status.wip{
+      background:rgba(219,160,80,.18);
+      border-color:rgba(160,100,40,.7);
+    }
+    .app-desc{
+      font-size:.82rem;
+      opacity:.9;
+      line-height:1.3;
+    }
+    footer{text-align:center;margin-top:auto;font-size:.8rem;opacity:.7;}
+  </style>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script defer src="app.js"></script>
+
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="logo-wrap">
+        <img src="logo.png" alt="Logo La Bottega del Caffè">
+      </div>
+      <h1 class="title">La Bottega del Caffè</h1>
+      <p class="subtitle">Le tue web app, tutte in una tazzina.</p>
+    </header>
+
+    <main>
+      <div class="section-label">Le mie web app</div>
+      <div class="apps-list">
+
+        <!-- APP 1 - Operativa -->
+        <a class="app-card" href="pulizie/">
+          <div class="app-icon">
+            <img src="pulizie/pulizie.png" alt="pulizie">
+          </div>
+          <div class="app-main">
+            <div class="app-header-row">
+              <div class="app-name">Gestione turni pulizie</div>
+              <span class="app-status operativa">Operativa</span>
+            </div>
+            <div class="app-desc">
+              Un’app semplice e chiara per pianificare i turni delle pulizie, coordinare le squadre e garantire interventi puntuali ed efficienti.
+            </div>
+          </div>
+        </a>
+
+        <!-- APP 2 - Work in progress -->
+        <a class="app-card" href="turni/">
+ <div class="app-icon">
+            <img src="turni/turni.png" alt="turni">
+          </div>
+          <div class="app-main">
+                     <div class="app-header-row">
+              <div class="app-name">Gestione turni lavoro</div>
+              <span class="app-status wip">Work in progress</span>
+            </div>
+            <div class="app-desc">
+              Un’app semplice e intuitiva per organizzare i turni di lavoro. Permette di creare e aggiornare la pianificazione, notificare rapidamente i dipendenti e gestire cambi turno, ferie e presenze in un unico spazio.
+            </div>
+          </div>
+        </a>
+
+        <!-- APP 3 - Work in progress -->
+        <a class="app-card" href="spesa/">
+           <div class="app-icon">
+            <img src="spesa/spesa.png" alt="spesa">
+          </div>
+                    <div class="app-main">
+            <div class="app-header-row">
+              <div class="app-name">Lista della spesa</div>
+              <span class="app-status wip">Work in progress</span>
+            </div>
+            <div class="app-desc">
+              Un’app essenziale per creare, organizzare e condividere la tua lista della spesa. Ordinata, veloce e intuitiva, ti aiuta a non dimenticare nulla e a fare acquisti in modo semplice e senza stress.
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </main>
+
+    <footer>
+      © <span id="year"></span> La Bottega del Caffè
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

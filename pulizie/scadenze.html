@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>Turni Pulizie - Prossime scadenze</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="logo-64x64.png" rel="icon" sizes="64x64" type="image/png"/>
+<link href="logo-192x192.png" rel="apple-touch-icon" sizes="192x192"/>
+<link href="manifest.json" rel="manifest"/>
+<meta content="#4b2e13" name="theme-color"/>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body data-page="scadenze">
+<div class="splash-overlay" id="splash">
+<div class="splash-content">
+<img alt="Bottega del Caffè" class="splash-logo" src="logo.png"/>
+<div class="splash-title">Bottega del Caffè</div>
+<div class="splash-subtitle">Caricamento turni in corso...</div>
+<div class="splash-loader"></div>
+</div>
+</div>
+<div class="modal-overlay modal-hidden" id="app-modal">
+<div class="modal-card">
+<div class="modal-title" id="modal-title"></div>
+<div class="modal-message" id="modal-message"></div>
+<div class="modal-actions">
+<button class="secondary" id="modal-cancel-btn" type="button">Annulla</button>
+<button id="modal-ok-btn" type="button">OK</button>
+</div>
+</div>
+</div>
+<div class="app-shell">
+<header class="app-header">
+<img alt="Bottega del Caffè - Turni pulizie" class="app-logo" src="logo.png"/>
+<div class="app-title">Bottega del Caffè</div>
+<div class="app-subtitle">Prossime scadenze</div>
+<nav class="app-nav">
+<button onclick="window.location.href='index.html'" type="button">🏠 Home</button>
+<button onclick="window.location.href='scadenze.html'" type="button">📅 Scadenze</button>
+<button onclick="window.location.href='dafare.html'" type="button">📄 Da Fare</button>
+<button onclick="window.location.href='completati.html'" type="button">✅ Completati</button>
+<button onclick="window.location.href='statistiche.html'" type="button">📈 Statistiche</button>
+<button onclick="window.location.href='impostazioni.html'" type="button">⚙️ Impostazioni</button></nav>
+</header>
+<main class="app-main">
+<section class="card">
+<h2>Prossime scadenze</h2><div class="filter-row"><input id="scad-search" placeholder="Cerca lavoro o dipendente..." type="search"/><select id="scad-filter-employee"></select><select id="scad-filter-interval"><option value="">Tutti gli intervalli</option><option value="settimana">1 settimana</option><option value="mese">1 mese</option><option value="due-mesi">2 mesi</option><option value="anno">1 anno</option></select></div>
+<div class="tab-bar">
+<button class="tab-button scad-tab-button active" data-view="list" type="button">📄 Lista</button>
+<button class="tab-button scad-tab-button" data-view="intervals" type="button">📂 Per intervallo</button>
+<button class="tab-button scad-tab-button" data-view="dashboard" type="button">📊 Dashboard</button>
+</div>
+<div class="scadenze-view active" id="scad-view-list"></div>
+<div class="scadenze-view" id="scad-view-intervals"></div>
+<div class="scadenze-view" id="scad-view-dashboard"></div>
+<p class="hint small" style="margin-top:0.5rem;">
+          Le scadenze includono sia i lavori futuri che quelli già scaduti e non ancora completati.
+        </p>
+</section>
+</main>
+<footer class="app-footer">
+Web-app turni pulizie La Bottega del caffé
+    </footer>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js').catch(function(err) {
+          console.log('Service worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

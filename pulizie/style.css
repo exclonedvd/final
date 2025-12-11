@@ -1,0 +1,656 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: #f5eee3;
+  color: #2b1b0f;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tema Bottega del Caffè */
+:root {
+  --coffee-bg: #f5eee3;
+  --coffee-bg-soft: #fffaf2;
+  --coffee-bg-soft2: #fdf7ec;
+  --coffee-text: #2b1b0f;
+  --coffee-muted: #6b5a46;
+  --coffee-primary: #4b2e13;
+  --coffee-primary-soft: #6b3b1a;
+  --coffee-border: #dcc7aa;
+  --coffee-border-soft: #e7d7c3;
+  --coffee-badge: #f1e0c8;
+}
+
+/* Layout principale */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: radial-gradient(circle at top, #6b3b1a 0, #4b2e13 45%, #2b1b0f 100%);
+  color: #fff7e8;
+  padding: 0.75rem 0.6rem 1.75rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.app-main {
+  flex: 1;
+  padding: 1rem;
+  background: linear-gradient(to bottom, #fdf7ec 0, #f5eee3 40%, #f1e4d2 100%);
+}
+
+.app-footer {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--coffee-muted);
+}
+
+/* Logo & titoli */
+.app-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+  object-fit: cover;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.app-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.app-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Navigazione orizzontale scrollabile */
+.app-nav {
+  width: 100%;
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.6rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.app-nav button {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* Pulsanti */
+button {
+  border-radius: 9999px;
+  padding: 0.45rem 0.95rem;
+  font-weight: 500;
+  border: none;
+  background: linear-gradient(135deg, #6b3b1a, #4b2e13);
+  color: #fff7e8;
+  box-shadow: 0 10px 22px rgba(75, 46, 19, 0.35);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.05s ease, box-shadow 0.1s ease, background 0.12s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #7a4520, #5a3519);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 14px rgba(75, 46, 19, 0.35);
+}
+
+button.secondary {
+  background: #f3e2c5;
+  color: var(--coffee-text);
+  box-shadow: none;
+}
+
+button.secondary:hover {
+  background: #e7d7c3;
+}
+
+button.danger {
+  background: #b91c1c;
+  color: #fff7e8;
+  box-shadow: 0 10px 22px rgba(127, 29, 29, 0.4);
+}
+
+button.danger:hover {
+  background: #dc2626;
+}
+
+/* Card */
+.card {
+  background: var(--coffee-bg-soft);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--coffee-border-soft);
+  box-shadow: 0 10px 30px rgba(75, 46, 19, 0.18);
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Summary Home */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.summary-item {
+  background: var(--coffee-bg-soft2);
+  border-radius: 0.9rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--coffee-border-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-item:active {
+  transform: scale(0.98);
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  color: var(--coffee-muted);
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--coffee-primary);
+}
+
+@media (min-width: 640px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Liste lavori */
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0.25rem;
+  color: var(--coffee-muted);
+}
+
+.task-item,
+.completed-item,
+.custom-task-item,
+.scadenza-item {
+  background: #fffdf7;
+  border-radius: 0.9rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--coffee-border-soft);
+  margin-bottom: 0.5rem;
+}
+
+.task-title,
+.completed-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.task-meta,
+.completed-meta,
+.scadenza-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  font-size: 0.82rem;
+  color: var(--coffee-muted);
+}
+
+.task-controls {
+  margin-top: 0.45rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.task-controls select {
+  flex: 1;
+}
+
+/* Badge */
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.badge-interval {
+  background: var(--coffee-badge);
+  color: var(--coffee-primary);
+}
+
+.badge-assignee {
+  background: #e7d7c3;
+  color: var(--coffee-text);
+}
+
+.badge-status {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Tabs Da Fare / Scadenze */
+.tab-bar {
+  display: flex;
+  margin-bottom: 0.75rem;
+  gap: 0.4rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  flex: 1;
+  min-width: 90px;
+  background: #e7d7c3;
+  color: var(--coffee-text);
+  border: 1px solid var(--coffee-border-soft);
+  box-shadow: none;
+  padding-inline: 0.4rem;
+}
+
+.tab-button.active {
+  background: var(--coffee-primary);
+  color: #fff7e8;
+}
+
+.tab-content,
+.scadenze-view {
+  display: none;
+}
+
+.tab-content.active,
+.scadenze-view.active {
+  display: block;
+}
+
+/* Form */
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime-local"],
+select {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--coffee-border);
+  background: #fffdf7;
+  color: var(--coffee-text);
+  font-size: 0.9rem;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="datetime-local"]:focus,
+select:focus {
+  outline: 2px solid var(--coffee-primary-soft);
+  outline-offset: 1px;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group {
+  margin-bottom: 0.85rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--coffee-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Scadenze dashboard */
+.scadenze-group-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--coffee-muted);
+  margin: 0.5rem 0 0.25rem;
+}
+
+.scadenze-postpone-buttons {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.scadenze-postpone-buttons button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Completati */
+.completed-meta span {
+  display: block;
+}
+
+.completed-actions {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Hint */
+.hint {
+  font-size: 0.82rem;
+  color: var(--coffee-muted);
+}
+
+.small {
+  font-size: 0.75rem;
+}
+
+/* Splash screen */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #6b3b1a 0, #4b2e13 40%, #2b1b0f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.splash-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash-content {
+  text-align: center;
+  color: #fff7e8;
+}
+
+.splash-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  object-fit: cover;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+  margin-bottom: 0.8rem;
+}
+
+.splash-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.splash-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+}
+
+.splash-loader {
+  margin: 0.9rem auto 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 247, 232, 0.25);
+  border-top-color: #fff7e8;
+  animation: splash-spin 0.8s linear infinite;
+}
+
+@keyframes splash-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modal popup stile Bottega */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-card {
+  max-width: 320px;
+  width: 90%;
+  background: #fffaf2;
+  border-radius: 1rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.modal-title {
+  background: linear-gradient(135deg, #6b3b1a, #4b2e13);
+  color: #fff7e8;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.modal-message {
+  padding: 0.75rem 0.9rem 0.25rem;
+  font-size: 0.85rem;
+  color: var(--coffee-text);
+  white-space: pre-line;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem 0.8rem;
+}
+
+
+/* ===== Filtri ===== */
+.filter-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.filter-row input[type="search"],
+.filter-row select {
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--coffee-border);
+  background: var(--coffee-bg-soft);
+  color: var(--coffee-text);
+  font-size: 0.95rem;
+}
+
+/* ===== Badge scadenze più netti ===== */
+.badge-overdue {
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.badge-today {
+  background: #ffedd5;
+  color: #9a3412;
+  font-weight: 600;
+}
+
+.badge-soon {
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.badge-ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ===== Indicatore sync ===== */
+.sync-indicator {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--coffee-muted);
+}
+
+/* ===== Statistiche ===== */
+.stat-row {
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--coffee-border-soft);
+  font-size: 0.95rem;
+}
+
+/* ===== Dark mode ===== */
+body[data-theme="dark"] {
+  --coffee-bg: #0f0c0a;
+  --coffee-bg-soft: #15110e;
+  --coffee-bg-soft2: #1a1411;
+  --coffee-text: #f6eee5;
+  --coffee-muted: #cdbfb2;
+  --coffee-primary: #e6c39c;
+  --coffee-primary-soft: #f1d5b5;
+  --coffee-border: #3a2c22;
+  --coffee-border-soft: #2a2019;
+  --coffee-badge: #241b15;
+}
+
+body[data-theme="dark"] .badge-assignee {
+  background: #2b211a;
+}
+
+
+/* ===== Home: Turno di oggi ===== */
+.today-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--coffee-border-soft);
+}
+
+/* ===== Home: Carico del giorno ===== */
+.workload-row {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--coffee-border-soft);
+}
+
+.workload-name {
+  font-weight: 600;
+}
+
+.workload-count {
+  font-size: 0.9rem;
+  color: var(--coffee-muted);
+  margin-bottom: 0.25rem;
+}
+
+.workload-list {
+  margin: 0.25rem 0 0.25rem 1rem;
+}
+
+/* ===== Completati: gruppi e toggle ===== */
+.completed-group-title {
+  margin-top: 0.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--coffee-primary);
+}
+
+.inline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.1rem;
+}
+
+
+/* ===== Note lavori ===== */
+.task-note {
+  margin-top: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  color: var(--coffee-muted);
+  background: var(--coffee-bg-soft2);
+  border: 1px solid var(--coffee-border-soft);
+}
+
+
+.modal-input {
+  width: 100%;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--coffee-border);
+  background: #fffdf7;
+  color: var(--coffee-text);
+  font-size: 0.9rem;
+}
+
+.modal-input:focus {
+  outline: 2px solid var(--coffee-primary-soft);
+  outline-offset: 1px;
+}

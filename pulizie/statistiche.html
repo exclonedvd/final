@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Turni Pulizie - Statistiche</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" type="image/png" sizes="64x64" href="logo-64x64.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="logo-192x192.png"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#4b2e13"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body data-page="stats">
+  <div id="splash" class="splash-overlay">
+    <div class="splash-content">
+      <img src="logo.png" alt="Bottega del Caffè" class="splash-logo"/>
+      <div class="splash-title">Bottega del Caffè</div>
+      <div class="splash-subtitle">Caricamento statistiche...</div>
+      <div class="splash-loader"></div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <img class="app-logo" src="logo.png" alt="Bottega del Caffè - Turni pulizie"/>
+      <div class="app-title">Bottega del Caffè</div>
+      <div class="app-subtitle">Statistiche</div>
+      <nav class="app-nav">
+        <button type="button" onclick="window.location.href='index.html'">🏠 Home</button>
+        <button type="button" onclick="window.location.href='scadenze.html'">📅 Scadenze</button>
+        <button type="button" onclick="window.location.href='dafare.html'">📄 Da Fare</button>
+        <button type="button" onclick="window.location.href='completati.html'">✅ Completati</button>
+        <button type="button" onclick="window.location.href='statistiche.html'">📈 Statistiche</button>
+        <button type="button" onclick="window.location.href='impostazioni.html'">⚙️ Impostazioni</button>
+      </nav>
+    </header>
+
+    <main class="app-main">
+      <section class="card">
+        <h2>Riepilogo</h2>
+        <div id="stats-summary"></div>
+      </section>
+
+      <section class="card">
+        <h2>Completamenti per dipendente (ultimi 30 giorni)</h2>
+        <div id="stats-by-employee"></div>
+      </section>
+
+      <section class="card">
+        <h2>Ritardi medi</h2>
+        <div id="stats-late"></div>
+      </section>
+
+      <section class="card">
+        <h2>Export</h2>
+        <div class="actions">
+          <button type="button" id="export-csv-btn">Esporta CSV</button>
+          <button type="button" id="export-json-btn" class="secondary">Esporta JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      Web-app turni pulizie La Bottega del caffé
+    </footer>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work in progress - La Bottega del Caffè</title>
+
+  <style>
+    :root {
+      --bg: #f3e0c7;
+      --bg-dark: #e0c6a0;
+      --coffee: #4b2a22;
+      --coffee-soft: #6a3a2b;
+      --radius-card: 18px;
+      --shadow-soft: 0 4px 10px rgba(0,0,0,.12);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;}
+
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--coffee);
+    }
+
+    .page{
+      min-height:100vh;
+      max-width:480px;
+      margin:0 auto;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .back{
+      text-decoration:none;
+      color:var(--coffee-soft);
+      font-size:1.4rem;
+      line-height:1;
+    }
+
+    .title-wrap h1{
+      font-size:1.15rem;
+    }
+
+    .badge{
+      display:inline-block;
+      margin-top:4px;
+      font-size:.7rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid rgba(75,42,34,.35);
+      background:rgba(243,224,199,.9);
+    }
+    .badge.operativa{
+      background:rgba(120,180,120,.18);
+      border-color:rgba(60,120,60,.6);
+    }
+    .badge.wip{
+      background:rgba(219,160,80,.18);
+      border-color:rgba(160,100,40,.7);
+    }
+
+    main{flex:1;}
+
+    .card{
+      margin-top:10px;
+      padding:14px;
+      border-radius:var(--radius-card);
+      background:linear-gradient(135deg,#f6e5c9,var(--bg-dark));
+      box-shadow:var(--shadow-soft);
+      border:1px solid rgba(75,42,34,.12);
+      font-size:.9rem;
+      line-height:1.4;
+    }
+
+    footer{
+      text-align:center;
+      font-size:.8rem;
+      opacity:.7;
+      margin-top:auto;
+    }
+
+    /* --- Animazioni WIP (coerenti con la palette originale) --- */
+    .wip-animated{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-weight:800;
+      letter-spacing:.02em;
+      color:var(--coffee);
+      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      animation: wipPulse 1.8s ease-in-out infinite;
+    }
+
+    .wip-dots::after{
+      content:"";
+      display:inline-block;
+      width:1.2em;
+      text-align:left;
+      animation: wipDots 1.2s steps(4, end) infinite;
+    }
+
+    .wip-badge-wiggle{
+      animation: badgeWiggle 2.6s ease-in-out infinite;
+      transform-origin: 10% 50%;
+    }
+
+    @keyframes wipPulse{
+      0%,100%{transform: translateY(0); opacity:1;}
+      50%{transform: translateY(-1px); opacity:.9;}
+    }
+
+    @keyframes wipDots{
+      0%{content:"";}
+      25%{content:".";}
+      50%{content:"..";}
+      75%{content:"...";}
+      100%{content:"";}
+    }
+
+    @keyframes badgeWiggle{
+      0%,100%{transform: rotate(0deg);}
+      50%{transform: rotate(-2deg);}
+    }
+
+    /* Accessibilità */
+    @media (prefers-reduced-motion: reduce){
+      .wip-animated, .wip-badge-wiggle, .wip-dots::after{
+        animation:none !important;
+      }
+    }
+  </style>
+
+  <!-- Mantengo i riferimenti originali -->
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="apple-touch-icon" href="../icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script defer src="../app.js"></script>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <a class="back" href="../index.html" aria-label="Torna alla home">←</a>
+      <div class="title-wrap">
+        <h1>
+          <span class="wip-animated">Work in progress 🚧☕</span>
+        </h1>
+        <span class="badge wip wip-badge-wiggle">Work in progress</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <p>
+          <strong class="wip-animated">
+            Work in progress 👷✨
+          </strong>
+          <span class="wip-dots"></span>
+        </p>
+
+        <p style="margin-top:8px;">
+          Stiamo preparando questa sezione con calma e tanto caffè ☕😄
+        </p>
+
+        <p style="margin-top:8px;">
+          Torna presto: arrivano aggiornamenti e nuove funzioni 🚀
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      © <span id="year"></span> La Bottega del Caffè
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
