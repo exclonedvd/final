@@ -762,4 +762,12 @@ select:focus {
     .form-field {
         gap: 2px;
     }
+
+    .inline-form input,
+    .form-field input {
+        height: 36px;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 14px;
+    }
 }
