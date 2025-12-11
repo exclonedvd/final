@@ -750,4 +750,15 @@ select:focus {
         white-space: nowrap;
     }
 
+
+    input,
+    select {
+        font-size: 15px;
+        padding: 6px 10px;
+        border-radius: 18px;
+    }
+
+    .form-field {
+        gap: 4px;
+    }
 }
