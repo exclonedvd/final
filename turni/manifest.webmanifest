@@ -1,0 +1,17 @@
+{
+  "name": "Bottega del Caffè - Turni",
+  "short_name": "Turni Caffè",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3e2c0",
+  "theme_color": "#c48a3b",
+  "icons": [
+    {
+      "src": "turni.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
