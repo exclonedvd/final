@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
-<!-- PWA manifest & theme -->
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#c48a3b">
-
-<!-- Icons -->
-<link rel="icon" type="image/png" sizes="192x192" href="turni.png">
-<link rel="apple-touch-icon" href="turni.png">
-
-
   <meta charset="UTF-8">
   <title>Bottega del Caffè - Turni (v16-hf2e-hf2)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -2477,18 +2467,5 @@ function computeHours(week){
     updateSyncInfoUI();
   })();
 </script>
-
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./service-worker.js")
-        .catch(err => {
-          console.error("Service Worker registration failed:", err);
-        });
-    });
-  }
-</script>
-
 </body>
 </html>
