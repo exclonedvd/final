@@ -1,193 +1,153 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Work in progress - La Bottega del Caffè</title>
-
-  <style>
-    :root {
-      --bg: #f3e0c7;
-      --bg-dark: #e0c6a0;
-      --coffee: #4b2a22;
-      --coffee-soft: #6a3a2b;
-      --radius-card: 18px;
-      --shadow-soft: 0 4px 10px rgba(0,0,0,.12);
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0;}
-
-    body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--bg);
-      color:var(--coffee);
-    }
-
-    .page{
-      min-height:100vh;
-      max-width:480px;
-      margin:0 auto;
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-
-    header{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .back{
-      text-decoration:none;
-      color:var(--coffee-soft);
-      font-size:1.4rem;
-      line-height:1;
-    }
-
-    .title-wrap h1{
-      font-size:1.15rem;
-    }
-
-    .badge{
-      display:inline-block;
-      margin-top:4px;
-      font-size:.7rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      padding:3px 8px;
-      border-radius:999px;
-      border:1px solid rgba(75,42,34,.35);
-      background:rgba(243,224,199,.9);
-    }
-    .badge.operativa{
-      background:rgba(120,180,120,.18);
-      border-color:rgba(60,120,60,.6);
-    }
-    .badge.wip{
-      background:rgba(219,160,80,.18);
-      border-color:rgba(160,100,40,.7);
-    }
-
-    main{flex:1;}
-
-    .card{
-      margin-top:10px;
-      padding:14px;
-      border-radius:var(--radius-card);
-      background:linear-gradient(135deg,#f6e5c9,var(--bg-dark));
-      box-shadow:var(--shadow-soft);
-      border:1px solid rgba(75,42,34,.12);
-      font-size:.9rem;
-      line-height:1.4;
-    }
-
-    footer{
-      text-align:center;
-      font-size:.8rem;
-      opacity:.7;
-      margin-top:auto;
-    }
-
-    /* --- Animazioni WIP (coerenti con la palette originale) --- */
-    .wip-animated{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-weight:800;
-      letter-spacing:.02em;
-      color:var(--coffee);
-      text-shadow: 0 1px 0 rgba(255,255,255,.35);
-      animation: wipPulse 1.8s ease-in-out infinite;
-    }
-
-    .wip-dots::after{
-      content:"";
-      display:inline-block;
-      width:1.2em;
-      text-align:left;
-      animation: wipDots 1.2s steps(4, end) infinite;
-    }
-
-    .wip-badge-wiggle{
-      animation: badgeWiggle 2.6s ease-in-out infinite;
-      transform-origin: 10% 50%;
-    }
-
-    @keyframes wipPulse{
-      0%,100%{transform: translateY(0); opacity:1;}
-      50%{transform: translateY(-1px); opacity:.9;}
-    }
-
-    @keyframes wipDots{
-      0%{content:"";}
-      25%{content:".";}
-      50%{content:"..";}
-      75%{content:"...";}
-      100%{content:"";}
-    }
-
-    @keyframes badgeWiggle{
-      0%,100%{transform: rotate(0deg);}
-      50%{transform: rotate(-2deg);}
-    }
-
-    /* Accessibilità */
-    @media (prefers-reduced-motion: reduce){
-      .wip-animated, .wip-badge-wiggle, .wip-dots::after{
-        animation:none !important;
-      }
-    }
-  </style>
-
-  <!-- Mantengo i riferimenti originali -->
-  <link rel="manifest" href="../manifest.webmanifest">
-  <meta name="theme-color" content="#0f172a">
-  <link rel="apple-touch-icon" href="../icons/icon-192.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <script defer src="../app.js"></script>
+    <meta charset="UTF-8" />
+    <title>La Bottega del Caffè - Lista Spesa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#c57b35" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
 </head>
-
 <body>
-  <div class="page">
-    <header>
-      <a class="back" href="../index.html" aria-label="Torna alla home">←</a>
-      <div class="title-wrap">
-        <h1>
-          <span class="wip-animated">Work in progress 🚧☕</span>
-        </h1>
-        <span class="badge wip wip-badge-wiggle">Work in progress</span>
-      </div>
-    </header>
+    <div class="app-background"></div>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-wrapper">
+                <img src="assets/logo.png" alt="La Bottega del Caffè" class="logo" />
+            </div>
+            <div class="header-text">
+                <h1 class="brand-title">La Bottega del Caffè</h1>
+                <p class="brand-subtitle">Lista spesa di caffetteria</p>
+            </div>
+        </header>
 
-    <main>
-      <div class="card">
-        <p>
-          <strong class="wip-animated">
-            Work in progress 👷✨
-          </strong>
-          <span class="wip-dots"></span>
-        </p>
+        <!-- Vista login -->
+        <main id="view-login" class="view active">
+            <section class="card login-card">
+                <h2>Accedi</h2>
+                <p class="muted">Seleziona l&apos;utente e inserisci il PIN / password.</p>
+                <form id="login-form" class="form-vertical">
+                    <label class="form-field">
+                        <span>Utente</span>
+                        <select id="login-username" required>
+                            <option value="">Seleziona...</option>
+                        </select>
+                    </label>
 
-        <p style="margin-top:8px;">
-          Stiamo preparando questa sezione con calma e tanto caffè ☕😄
-        </p>
+                    <label class="form-field">
+                        <span>PIN / Password</span>
+                        <input type="password" id="login-pin" autocomplete="current-password" inputmode="numeric" pattern="[0-9]*" required />
+                    </label>
 
-        <p style="margin-top:8px;">
-          Torna presto: arrivano aggiornamenti e nuove funzioni 🚀
-        </p>
-      </div>
-    </main>
+                    <button type="submit" class="btn primary full-width">Entra</button>
+                </form>
+                <p class="login-hint">
+                    Admin di default: <strong>admin / 0000</strong>
+                </p>
+            </section>
+        </main>
 
-    <footer>
-      © <span id="year"></span> La Bottega del Caffè
-    </footer>
-  </div>
+        <!-- Vista dipendenti -->
+        <main id="view-employee" class="view">
+            <section class="top-bar">
+                <div>
+                    <h2>Area Dipendenti</h2>
+                    <p id="employee-greeting" class="muted"></p>
+                </div>
+                <button id="logout-employee" class="btn ghost">Esci</button>
+            </section>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+            <section class="card checklist-card">
+                <div class="card-header-row">
+                    <h3>Lista spesa</h3>
+                    <span class="pill">Checklist</span>
+                </div>
+                <p class="muted small">Seleziona i prodotti che servono e indica le quantità.</p>
+
+                <div id="checklist-container" class="checklist-container">
+                    <!-- Prodotti caricati via JavaScript -->
+                </div>
+
+                <button id="send-checklist" class="btn primary full-width">Invia lista al responsabile</button>
+                <p id="employee-status" class="status-message" aria-live="polite"></p>
+
+            </section>
+        </main>
+
+        <!-- Vista admin -->
+        <main id="view-admin" class="view">
+            <section class="top-bar">
+                <div>
+                    <h2>Area Admin</h2>
+                    <p id="admin-greeting" class="muted"></p>
+                </div>
+                <button id="logout-admin" class="btn ghost">Esci</button>
+            </section>
+
+            <section class="tabs">
+                <button class="tab-button active" data-tab="admin-orders">Liste inviate</button>
+                <button class="tab-button" data-tab="admin-products">Prodotti</button>
+                <button class="tab-button" data-tab="admin-employees">Dipendenti</button>
+            </section>
+
+            <!-- Tab liste -->
+            <section id="admin-orders" class="card tab-panel active">
+                <div class="card-header-row">
+                    <h3>Liste inviate</h3>
+                    <span class="pill">Storico</span>
+                </div>
+                <div id="orders-empty" class="muted">Nessuna lista inviata per ora.</div>
+                <div id="orders-list" class="orders-list"></div>
+            </section>
+
+            <!-- Tab prodotti -->
+            <section id="admin-products" class="card tab-panel">
+                <div class="card-header-row">
+                    <h3>Gestione prodotti</h3>
+                    <span class="pill">Checklist</span>
+                </div>
+                <form id="add-product-form" class="inline-form">
+                    <input type="text" id="new-product-name" placeholder="Nuovo prodotto..." required />
+                    <input type="text" id="new-product-category" placeholder="Categoria (es. Frigo, Bar, Magazzino)" required />
+                    <button type="submit" class="btn primary">Aggiungi</button>
+                </form>
+                <div id="products-list" class="list-table"></div>
+            </section>
+
+            <!-- Tab dipendenti -->
+            <section id="admin-employees" class="card tab-panel">
+                <div class="card-header-row">
+                    <h3>Gestione dipendenti</h3>
+                    <span class="pill">Accessi</span>
+                </div>
+                <form id="add-employee-form" class="inline-form responsive">
+                    <input type="text" id="new-employee-name" placeholder="Nome e cognome" required />
+                    <input type="text" id="new-employee-username" placeholder="Username" required />
+                    <input type="password" id="new-employee-pin" placeholder="PIN / password" inputmode="numeric" pattern="[0-9]*" required />
+                    <button type="submit" class="btn primary">Aggiungi</button>
+                </form>
+                <p class="muted small">
+                    L&apos;utente <strong>admin / 0000</strong> è creato automaticamente al primo avvio e non può essere eliminato.
+                </p>
+                <div id="employees-list" class="list-table"></div>
+                <button id="clear-database" class="btn danger full-width">
+                    Cancella tutti i dati (database)
+                </button>
+                <p class="muted small">
+                    Attenzione: questa azione elimina utenti, prodotti e liste salvate in questo browser e ripristina i dati iniziali.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
