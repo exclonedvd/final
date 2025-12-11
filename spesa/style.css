@@ -753,12 +753,13 @@ select:focus {
 
     input,
     select {
-        font-size: 15px;
-        padding: 6px 10px;
-        border-radius: 18px;
+        font-size: 14px;
+        padding: 4px 10px;
+        border-radius: 10px;
+        max-height: 40px;
     }
 
     .form-field {
-        gap: 4px;
+        gap: 2px;
     }
 }
