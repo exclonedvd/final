@@ -1,6 +1,6 @@
 {
-  "name": "App Casa",
-  "short_name": "App Casa",
+  "name": "La Bottega Hub",
+  "short_name": "La Bottega Hub",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
