@@ -581,6 +581,9 @@ function bindAdminOrdersInteractions() {
             header.appendChild(main);
             header.appendChild(chip);
 
+            const actions = document.createElement("div");
+            actions.className = "order-actions";
+
             const exportBtn = document.createElement("button");
             exportBtn.type = "button";
             exportBtn.className = "btn small ghost";
@@ -588,7 +591,27 @@ function bindAdminOrdersInteractions() {
             exportBtn.addEventListener("click", () => {
                 exportOrderToPdf(order);
             });
-            header.appendChild(exportBtn);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.type = "button";
+            deleteBtn.className = "btn small danger";
+            deleteBtn.textContent = "Elimina";
+            deleteBtn.addEventListener("click", () => {
+                const dateText = formatDateTime(order.createdAt);
+                const confirmed = confirm(
+                    `Vuoi eliminare la lista di ${order.employeeName} (${dateText})?`
+                );
+                if (!confirmed) return;
+
+                const all = loadOrders().filter((o) => o.id !== order.id);
+                saveOrders(all);
+                renderAdminOrders();
+                showToast("Lista eliminata.");
+            });
+
+            actions.appendChild(exportBtn);
+            actions.appendChild(deleteBtn);
+            header.appendChild(actions);
 
             const productsMap = new Map(
                 loadProducts().map((p) => [p.id, p])

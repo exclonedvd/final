@@ -528,6 +528,12 @@ select:focus {
     align-items: baseline;
 }
 
+.order-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
 .order-employee {
     font-weight: 600;
     font-size: 0.95rem;
@@ -726,7 +732,7 @@ select:focus {
         gap: 6px;
     }
 
-    .order-header .btn.small {
+    .order-actions {
         align-self: flex-start;
     }
 
