@@ -1075,13 +1075,25 @@ function bindAdminOrdersInteractions() {
         setTabsEvents();
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+        // Disabilita caching PWA: rimuove eventuali Service Worker e CacheStorage
+        // così l'app si aggiorna sempre senza dover cancellare cache/dati del browser.
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("./sw.js")
-                .catch((err) =>
-                    console.error("Service worker registration failed:", err)
-                );
+            try {
+                const regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(regs.map((r) => r.unregister()));
+            } catch (e) {
+                // ignore
+            }
+
+            try {
+                if ("caches" in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map((k) => caches.delete(k)));
+                }
+            } catch (e) {
+                // ignore
+            }
         }
 
         initFirebase()

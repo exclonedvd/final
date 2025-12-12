@@ -777,3 +777,8 @@ select:focus {
         font-size: 14px;
     }
 }
+
+/* Link buttons */
+a.btn{ text-decoration:none; }
+.back-to-main{ white-space:nowrap; }
+

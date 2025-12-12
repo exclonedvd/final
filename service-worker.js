@@ -1,65 +1,36 @@
-const CACHE_NAME = "app-casa-v1";
+// service-worker.js
+// "No-cache" Service Worker:
+// - cancella tutte le cache
+// - si auto-disinstalla
+// Serve solo a ripulire eventuali vecchi SW/cache installati in passato.
 
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./app.js",
-  "./manifest.webmanifest",
-  "./logo.png",
-
-  "./pulizie/",
-  "./pulizie/index.html",
-  "./pulizie/pulizie.png",
-
-  "./turni/",
-  "./turni/index.html",
-  "./turni/turni.png",
-
-  "./spesa/",
-  "./spesa/index.html",
-  "./spesa/spesa.png",
-
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    } catch (e) {
+      // ignore
+    }
+
+    try {
+      await self.registration.unregister();
+    } catch (e) {
+      // ignore
+    }
+
+    // Forza il refresh delle pagine controllate (se presenti)
+    try {
+      const clientsList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      clientsList.forEach((client) => client.navigate(client.url));
+    } catch (e) {
+      // ignore
+    }
+  })());
 });
 
-// Strategia semplice: cache-first, poi rete
-self.addEventListener("fetch", (event) => {
-  const req = event.request;
-
-  if (req.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-
-      return fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
-  );
-});
+// Nessun fetch handler: non intercettare richieste = niente cache lato SW.

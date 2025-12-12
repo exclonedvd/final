@@ -30,8 +30,10 @@
 <img alt="Bottega del Caffè - Turni pulizie" class="app-logo" src="logo.png"/>
 <div class="app-title">Bottega del Caffè</div>
 <div class="app-subtitle">Prossime scadenze</div>
-<nav class="app-nav">
-<button onclick="window.location.href='index.html'" type="button">🏠 Home</button>
+
+        <nav class="app-nav">
+<button class="secondary" onclick="window.location.href='../index.html'" type="button">⬅️ App principali</button>
+        <button onclick="window.location.href='index.html'" type="button">🏠 Home</button>
 <button onclick="window.location.href='scadenze.html'" type="button">📅 Scadenze</button>
 <button onclick="window.location.href='dafare.html'" type="button">📄 Da Fare</button>
 <button onclick="window.location.href='completati.html'" type="button">✅ Completati</button>
@@ -63,13 +65,22 @@ Web-app turni pulizie La Bottega del caffé
 <script src="firebase-config.js"></script>
 <script src="script.js"></script>
 <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js').catch(function(err) {
-          console.log('Service worker registration failed:', err);
-        });
-      });
-    }
+    // Disabilita caching PWA: rimuove eventuali Service Worker e CacheStorage
+    // così l'app si aggiorna sempre senza dover cancellare cache/dati del browser.
+    (async () => {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      } catch (e) { /* ignore */ }
+
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+      } catch (e) { /* ignore */ }
+    })();
   </script>
 </body>
 </html>

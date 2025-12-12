@@ -20,7 +20,9 @@
       <img class="app-logo" src="logo.png" alt="Bottega del Caffè - Turni pulizie"/>
       <div class="app-title">Bottega del Caffè</div>
       <div class="app-subtitle">Statistiche</div>
-      <nav class="app-nav">
+      
+        <nav class="app-nav">
+<button class="secondary" onclick="window.location.href='../index.html'" type="button">⬅️ App principali</button>
         <button type="button" onclick="window.location.href='index.html'">🏠 Home</button>
         <button type="button" onclick="window.location.href='scadenze.html'">📅 Scadenze</button>
         <button type="button" onclick="window.location.href='dafare.html'">📄 Da Fare</button>
@@ -64,5 +66,24 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="firebase-config.js"></script>
   <script src="script.js"></script>
+
+<script>
+    // Disabilita caching PWA: rimuove eventuali Service Worker e CacheStorage
+    // così l'app si aggiorna sempre senza dover cancellare cache/dati del browser.
+    (async () => {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      } catch (e) { /* ignore */ }
+
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
 </body>
 </html>
