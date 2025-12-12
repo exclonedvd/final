@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Bottega del Caffè - Turni (v16-hf2e-hf2)</title>
+  <title>Bottega del Caffè - Turni </title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -491,36 +491,36 @@
           <div>
             <div class="model-block-title">Giorni feriali (Lun-Ven)</div>
             <table>
-              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <thead><tr><th>Dipendente</th><th>Inizio</th><th>Fine</th></tr></thead>
               <tbody>
-                <tr><td>Persona 1</td><td><input id="wd1Start" type="time"></td><td><input id="wd1End" type="time"></td></tr>
-                <tr><td>Persona 2</td><td><input id="wd2Start" type="time"></td><td><input id="wd2End" type="time"></td></tr>
-                <tr><td>Persona 3</td><td><input id="wd3Start" type="time"></td><td><input id="wd3End" type="time"></td></tr>
-                <tr><td>Persona 4</td><td><input id="wd4Start" type="time"></td><td><input id="wd4End" type="time"></td></tr>
+                <tr><td>Dipendente 1</td><td><input id="wd1Start" type="time"></td><td><input id="wd1End" type="time"></td></tr>
+                <tr><td>Dipendente 2</td><td><input id="wd2Start" type="time"></td><td><input id="wd2End" type="time"></td></tr>
+                <tr><td>Dipendente 3</td><td><input id="wd3Start" type="time"></td><td><input id="wd3End" type="time"></td></tr>
+                <tr><td>Dipendente 4</td><td><input id="wd4Start" type="time"></td><td><input id="wd4End" type="time"></td></tr>
               </tbody>
             </table>
           </div>
           <div>
             <div class="model-block-title">Sabato</div>
             <table>
-              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <thead><tr><th>Dipendente</th><th>Inizio</th><th>Fine</th></tr></thead>
               <tbody>
-                <tr><td>Persona 1</td><td><input id="sa1Start" type="time"></td><td><input id="sa1End" type="time"></td></tr>
-                <tr><td>Persona 2</td><td><input id="sa2Start" type="time"></td><td><input id="sa2End" type="time"></td></tr>
-                <tr><td>Persona 3</td><td><input id="sa3Start" type="time"></td><td><input id="sa3End" type="time"></td></tr>
-                <tr><td>Persona 4</td><td><input id="sa4Start" type="time"></td><td><input id="sa4End" type="time"></td></tr>
+                <tr><td>Dipendente 1</td><td><input id="sa1Start" type="time"></td><td><input id="sa1End" type="time"></td></tr>
+                <tr><td>Dipendente 2</td><td><input id="sa2Start" type="time"></td><td><input id="sa2End" type="time"></td></tr>
+                <tr><td>Dipendente 3</td><td><input id="sa3Start" type="time"></td><td><input id="sa3End" type="time"></td></tr>
+                <tr><td>Dipendente 4</td><td><input id="sa4Start" type="time"></td><td><input id="sa4End" type="time"></td></tr>
               </tbody>
             </table>
           </div>
           <div>
             <div class="model-block-title">Domenica / Festivi</div>
             <table>
-              <thead><tr><th>Persona</th><th>Inizio</th><th>Fine</th></tr></thead>
+              <thead><tr><th>Dipendente</th><th>Inizio</th><th>Fine</th></tr></thead>
               <tbody>
-                <tr><td>Persona 1</td><td><input id="su1Start" type="time"></td><td><input id="su1End" type="time"></td></tr>
-                <tr><td>Persona 2</td><td><input id="su2Start" type="time"></td><td><input id="su2End" type="time"></td></tr>
-                <tr><td>Persona 3</td><td><input id="su3Start" type="time"></td><td><input id="su3End" type="time"></td></tr>
-                <tr><td>Persona 4</td><td><input id="su4Start" type="time"></td><td><input id="su4End" type="time"></td></tr>
+                <tr><td>Dipendente 1</td><td><input id="su1Start" type="time"></td><td><input id="su1End" type="time"></td></tr>
+                <tr><td>Dipendente 2</td><td><input id="su2Start" type="time"></td><td><input id="su2End" type="time"></td></tr>
+                <tr><td>Dipendente 3</td><td><input id="su3Start" type="time"></td><td><input id="su3End" type="time"></td></tr>
+                <tr><td>Dipendente 4</td><td><input id="su4Start" type="time"></td><td><input id="su4End" type="time"></td></tr>
               </tbody>
             </table>
           </div>
@@ -686,10 +686,10 @@
   function defaultModels(){
     function mkWeekday(p4Start, p4End){
       return [
-        { label:'Persona 1', start:'07:00', end:'14:00' },
-        { label:'Persona 2', start:'09:00', end:'14:00' },
-        { label:'Persona 3', start:'14:00', end:'20:30' },
-        { label:'Persona 4', start:p4Start, end:p4End }
+        { label:'Dipendente 1', start:'07:00', end:'14:00' },
+        { label:'Dipendente 2', start:'09:00', end:'14:00' },
+        { label:'Dipendente 3', start:'14:00', end:'20:30' },
+        { label:'Dipendente 4', start:p4Start, end:p4End }
       ];
     }
     var m1Week = mkWeekday('14:00','19:00');
@@ -702,10 +702,10 @@
         weekday: m1Week,
         saturday: JSON.parse(JSON.stringify(m1Week)),
         sunday: [
-          { label:'Persona 1', start:'07:30', end:'14:00' },
-          { label:'Persona 2', start:'09:00', end:'14:00' },
-          { label:'Persona 3', start:'14:00', end:'20:00' },
-          { label:'Persona 4', start:'14:00', end:'20:00' }
+          { label:'Dipendente 1', start:'07:30', end:'14:00' },
+          { label:'Dipendente 2', start:'09:00', end:'14:00' },
+          { label:'Dipendente 3', start:'14:00', end:'20:00' },
+          { label:'Dipendente 4', start:'14:00', end:'20:00' }
         ]
       },
       "2": {
@@ -714,10 +714,10 @@
         weekday: m2Week,
         saturday: JSON.parse(JSON.stringify(m2Week)),
         sunday: [
-          { label:'Persona 1', start:'07:30', end:'14:00' },
-          { label:'Persona 2', start:'09:00', end:'14:00' },
-          { label:'Persona 3', start:'14:00', end:'20:00' },
-          { label:'Persona 4', start:'14:00', end:'20:00' }
+          { label:'Dipendente 1', start:'07:30', end:'14:00' },
+          { label:'Dipendente 2', start:'09:00', end:'14:00' },
+          { label:'Dipendente 3', start:'14:00', end:'20:00' },
+          { label:'Dipendente 4', start:'14:00', end:'20:00' }
         ]
       }
     };
@@ -920,7 +920,7 @@
       updateTodayLabelUI();
       updateSyncInfoUI();
     } else {
-      alert('Password errata (usa "admin").');
+      alert('Password errata.');
     }
   };
 
@@ -1075,20 +1075,20 @@
     var id = uid();
     var models = getModels();
     var baseWeek=[
-      {label:'Persona 1',start:'07:00',end:'14:00'},
-      {label:'Persona 2',start:'09:00',end:'14:00'},
-      {label:'Persona 3',start:'14:00',end:'20:30'},
-      {label:'Persona 4',start:'14:00',end:'19:00'}
+      {label:'Dipendente 1',start:'07:00',end:'14:00'},
+      {label:'Dipendente 2',start:'09:00',end:'14:00'},
+      {label:'Dipendente 3',start:'14:00',end:'20:30'},
+      {label:'Dipendente 4',start:'14:00',end:'19:00'}
     ];
     models[id] = {
       id:id, name:'Nuovo modello',
       weekday: JSON.parse(JSON.stringify(baseWeek)),
       saturday: JSON.parse(JSON.stringify(baseWeek)),
       sunday:[
-        {label:'Persona 1',start:'07:30',end:'14:00'},
-        {label:'Persona 2',start:'09:00',end:'14:00'},
-        {label:'Persona 3',start:'14:00',end:'20:00'},
-        {label:'Persona 4',start:'14:00',end:'20:00'}
+        {label:'Dipendente 1',start:'07:30',end:'14:00'},
+        {label:'Dipendente 2',start:'09:00',end:'14:00'},
+        {label:'Dipendente 3',start:'14:00',end:'20:00'},
+        {label:'Dipendente 4',start:'14:00',end:'20:00'}
       ]
     };
     setModels(models);
@@ -1108,22 +1108,22 @@
 
     models[id].name = name;
     models[id].weekday = [
-      {label:'Persona 1',start:gt('wd1Start'),end:gt('wd1End')},
-      {label:'Persona 2',start:gt('wd2Start'),end:gt('wd2End')},
-      {label:'Persona 3',start:gt('wd3Start'),end:gt('wd3End')},
-      {label:'Persona 4',start:gt('wd4Start'),end:gt('wd4End')}
+      {label:'Dipendente 1',start:gt('wd1Start'),end:gt('wd1End')},
+      {label:'Dipendente 2',start:gt('wd2Start'),end:gt('wd2End')},
+      {label:'Dipendente 3',start:gt('wd3Start'),end:gt('wd3End')},
+      {label:'Dipendente 4',start:gt('wd4Start'),end:gt('wd4End')}
     ];
     models[id].saturday = [
-      {label:'Persona 1',start:gt('sa1Start'),end:gt('sa1End')},
-      {label:'Persona 2',start:gt('sa2Start'),end:gt('sa2End')},
-      {label:'Persona 3',start:gt('sa3Start'),end:gt('sa3End')},
-      {label:'Persona 4',start:gt('sa4Start'),end:gt('sa4End')}
+      {label:'Dipendente 1',start:gt('sa1Start'),end:gt('sa1End')},
+      {label:'Dipendente 2',start:gt('sa2Start'),end:gt('sa2End')},
+      {label:'Dipendente 3',start:gt('sa3Start'),end:gt('sa3End')},
+      {label:'Dipendente 4',start:gt('sa4Start'),end:gt('sa4End')}
     ];
     models[id].sunday = [
-      {label:'Persona 1',start:gt('su1Start'),end:gt('su1End')},
-      {label:'Persona 2',start:gt('su2Start'),end:gt('su2End')},
-      {label:'Persona 3',start:gt('su3Start'),end:gt('su3End')},
-      {label:'Persona 4',start:gt('su4Start'),end:gt('su4End')}
+      {label:'Dipendente 1',start:gt('su1Start'),end:gt('su1End')},
+      {label:'Dipendente 2',start:gt('su2Start'),end:gt('su2End')},
+      {label:'Dipendente 3',start:gt('su3Start'),end:gt('su3End')},
+      {label:'Dipendente 4',start:gt('su4Start'),end:gt('su4End')}
     ];
 
     setModels(models);
